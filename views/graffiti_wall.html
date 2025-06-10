@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>塗鴉牆</title>
+    <!-- <link rel="icon" href="../media/img/logo_new.png" type="image"> -->
+
+    <!-- <script src="/include/turf.min.js"></script> -->
+    <script src="/node_modules/@tweenjs/tween.js/src/Tween.js"></script>
+    <script src="/include/jquery@3.3.1/jquery.min.js"></script>
+    <script src="/include/jqueryui@1.13.0/jquery-ui.min.js"></script>
+    <script src="/include/js.cookie.min.js"></script>
+</head>
+<style>
+    @import url(/node_modules/cesium/Build/Cesium/Widgets/widgets.css);
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        /* position: absolute; */
+        top: 0;
+        left: 0;
+        font-family: Microsoft JhengHei;
+    }
+
+
+    #cesiumContainer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        position: absolute;
+        top: 0vh;
+        left: 0;
+        z-index: -10;
+        font-family: Microsoft JhengHei;
+    }
+
+    #threeContainer {
+        pointer-events: none;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0vh;
+        z-index: -9;
+    }
+
+    #inner_canvas {
+        position: absolute;
+        z-index: -1;
+        background: transparent !important;
+        touch-action: auto;
+        transition: top 0.5s ease-in-out;
+        top: 18vh;
+    }
+
+    /* 塗鴉 */
+    #divDrawcontent {
+        position: absolute;
+        /* top: 7vh; */
+        left: 0;
+        top: 0;
+        z-index: 0;
+        background-image: radial-gradient(#ccc 1px, transparent 0);
+  background-size: 20px 20px; /* 間格寬高 */
+  background-repeat: repeat;
+    }
+
+    .controlButtn {
+        /* position: absolute;
+        z-index: 2; */
+        display: flex;
+        justify-content: space-between;
+        right: 6vw;
+        top: 0vh;
+    }
+
+    .button-container {
+        /* display: flex; */
+        width: 67%;
+        height: 95%;
+        /* padding-top: 2vh; */
+        justify-content: space-around;
+        position: absolute;
+        /* right: -14vw; */
+        padding: 0vh 2.5vw
+    }
+
+    .button-container-end {
+        position: absolute;
+        top: 13vh;
+        right: 13.5vw;
+        display: flex;
+        flex-direction: column;
+        /* margin-top: 6vh; */
+        justify-content: space-between;
+        height: 8vh;
+        width: 3vh;
+    }
+
+
+    /* 右側面板樣式 */
+    .side-panel {
+        position: absolute;
+        top: 10px;
+        right: 0px;
+        width: 300px;
+        height: 400px;
+        background-color: #222;
+        color: #fff;
+        transition: transform 0.3s ease;
+        border-left: 1px solid #444;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 當加上 .collapsed 類別時，收闔右側欄 */
+    .side-panel.collapsed {
+        transform: translateX(85%);
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: #333;
+        border-bottom: 1px solid #555;
+        gap: 16px;
+    }
+
+    .panel-header button {
+        /* background-color: #00bcd4; */
+        /* color: #000; */
+        border: none;
+        /* padding: 6px 10px; */
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .panel-content {
+        padding: 20px;
+        flex: 1;
+        display: flex;
+    }
+
+    .toggle-img {
+        width: 25px;
+        height: 25px;
+        object-fit: contain;
+    }
+</style>
+
+<body>
+    <div id="cesiumContainer"></div>
+    <div id="threeContainer"> </div>
+
+    <!-- <iframe id="inner_canvas" src="../app/main_inner_canvas" style="display: none;"></iframe> -->
+    <div class="" id="mainDraw">
+        <div class="" id="divDrawcontent">
+            <canvas id="touchArea"></canvas>
+        </div>
+    </div>
+
+    <div class="side-panel" id="sidePanel">
+        <div class="panel-header">
+            <button id="toggleBtn"><img class="toggle-img" src="../../media/img/select/arrow_right0.png"></button>
+            <h3>塗鴉工具</h3>
+        </div>
+        <div class="panel-content graffitilistDiv">
+            <div class="controlButtn">
+                <div class="button-container">
+                    <div class="control-section" style="display: none">
+                        <p>控制選項</p>
+                        <select id="control_add">
+                            <option id="mouse_control" value="0">mouse</option>
+                            <option id="point_control" value="1" selected>point</option>
+                            <option id="touch_control" value="2">touch</option>
+                            <!-- <option id="point_control" value="1">point</option>
+                                    <option id="touch_control" value="2" selected>touch</option> -->
+                        </select>
+                    </div>
+
+                    <div class="control-section">
+                        <p id="draw_color_title">繪製顏色</p>
+                        <input type="color" id="draw_color" />
+                    </div>
+
+                    <div class="control-section">
+                        <p id="draw_lineWidth_title">線條寬度</p>
+                        <input type="number" id="draw_lineWidth" value="1.5" step="0.1" />
+                    </div>
+
+                    <div class="control-section" style="flex: 1.5">
+                        <p id="draw_tool_title">繪製工具</p>
+                        <div>
+                            <button id="add_pen">畫筆</button>
+                            <select class="add_shape">
+                                <option value="-1">加入形狀</option>
+                                <option value="0">圓形</option>
+                                <option value="1">矩形</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-container-end">
+                    <button id="undo">復原</button><br>
+                    <button id="clear">清除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--importmap--瀏覽器功能--自定義導入時使用的路徑映射-->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "../node_modules/three/build/three.module.js",
+        "three/addons/": "../node_modules/three/examples/jsm/",
+        "three/src/": "../node_modules/three/src/",
+        "three/examples/": "../node_modules/three/examples/",
+        "three-mesh-bvh": "../node_modules/three-mesh-bvh/build/index.module.js",
+        "three.meshline": "../node_modules/three.meshline/src/THREE.MeshLine.js"
+      }
+    }
+    </script>
+
+    <script>
+        // window['tab_type'] = "<%=type%>"
+    </script>
+
+    <script type="module" src="../src/graffiti_wall.js"></script>
+</body>
+
+
+</html>
