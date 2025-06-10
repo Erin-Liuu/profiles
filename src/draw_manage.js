@@ -21,6 +21,9 @@ var colorNow = [0, 0, 0];
 var lineWidth = 1.5;
 var undoStack = []
 
+let drawStartPos_temp = new THREE.Vector2()
+let draw_cb = function () { }
+
 let draw_list = []
 const file_limit = 10
 // const expires = 1 / 24 / 60
@@ -112,6 +115,7 @@ function clear_canvas_func() {
         //暫存圖檔
         save_image()
     }
+    draw_cb({ type: "clear" })
 }
 function undo_canvas_func() {
     if (undoStack.length > 1) {
@@ -122,56 +126,13 @@ function undo_canvas_func() {
         drawingContext.putImageData(prevState, 0, 0);
         //暫存圖檔
         save_image()
+
+        draw_cb({ type: "undo" })
     }
     else {
         undoStack = []
         clear_canvas_func()
     }
-}
-function get_arrow(tailPoint, headerPoint) {
-    if ((tailPoint.length < 2) || (headerPoint.length < 2)) return;
-    //画箭头的函数
-    let tailWidthFactor = fineArrowDefualParam.tailWidthFactor;
-    let neckWidthFactor = fineArrowDefualParam.neckWidthFactor;
-    let headWidthFactor = fineArrowDefualParam.headWidthFactor;
-    let headAngle = fineArrowDefualParam.headAngle;
-    let neckAngle = fineArrowDefualParam.neckAngle;
-    var o = [];
-    let d = [];
-    let e = 0;
-    let r = 0;
-    let n = 0;
-    let g = 0;
-    let i = 0;
-    let s = 0;
-
-    let a = 0;
-    let l = 0;
-    let u = 0;
-    let c = 0;
-    let p = 0;
-    let h = 0;
-    
-    o[0] = tailPoint;
-    o[1] = headerPoint;
-    e = o[0];
-    r = o[1];
-    n = P.PlotUtils.getBaseLength(o);
-    g = n * tailWidthFactor;
-    //尾部宽度因子
-    i = n * neckWidthFactor;
-    //脖子宽度银子
-    s = n * headWidthFactor;
-    //头部宽度因子
-    a = P.PlotUtils.getThirdPoint(r, e, P.Constants.HALF_PI, g, !0);
-    l = P.PlotUtils.getThirdPoint(r, e, P.Constants.HALF_PI, g, !1);
-    u = P.PlotUtils.getThirdPoint(e, r, headAngle, s, !1);
-    c = P.PlotUtils.getThirdPoint(e, r, headAngle, s, !0);
-    p = P.PlotUtils.getThirdPoint(e, r, neckAngle, i, !1);
-    h = P.PlotUtils.getThirdPoint(e, r, neckAngle, i, !0);
-    // d = [];
-    d.push([a[0], a[1]], [p[0], p[1]], [u[0], u[1]], [r[0], r[1]], [c[0], c[1]], [h[0], h[1]], [l[0], l[1]], [e[0], e[1]]);
-    return d;
 }
 
 class add_obj_control {
@@ -210,7 +171,7 @@ class add_obj_control {
             enabled: false,
             callback: function (event, x, y) {
                 console.log('mouse_down');
-                
+
                 that.down_func(that, event, x, y)
             }
         })
@@ -361,6 +322,8 @@ function start_draw() {
 
             that.mouse_move1.toggle(true)
             that.mouse_up1.toggle(true)
+
+            draw_cb({ type: "pen", data: { paint: true, x, y } })
         },
         move_func: function (that, event, x, y) {
             if (that.info.paint) {
@@ -375,6 +338,8 @@ function start_draw() {
                 that.info.drawStartPos.set(x, y);
                 // need to flag the map as needing updating.
                 // that.info.material.map.needsUpdate = true;
+
+                draw_cb({ type: "pen", data: { paint: true, x, y, color: that.info.color, lineWidth: that.info.lineWidth } })
             }
         },
         up_func: async function (that, event) {
@@ -392,6 +357,8 @@ function start_draw() {
 
             that.mouse_move1.toggle(false)
             that.mouse_up1.toggle(false)
+
+            draw_cb({ type: "pen", data: { paint: false } })
 
             //暫存圖檔
             save_image()
@@ -576,7 +543,7 @@ function start_draw() {
             that.mouse_down0.toggle(false)
             that.mouse_move0.toggle(false)
             that.mouse_up0.toggle(false)
-            
+
             that.mouse_down1.toggle(false)
             that.mouse_move1.toggle(false)
             that.mouse_up1.toggle(false)
@@ -644,6 +611,54 @@ function addShapeInit() {
     if (SHAPETYPE * 1 !== -1) add_shape_control.init()
 }
 
+function update_draw_info({ type, data }) {
+    switch (type) {
+        case "pen":
+            let { paint, x, y, color, lineWidth } = data
+            if (paint) {
+                if (!color) {  //down
+                    drawingContext.beginPath();
+                    drawStartPos_temp.set(x, y)
+                } else {
+                    drawingContext.moveTo(drawStartPos_temp.x, drawStartPos_temp.y);
+                    drawingContext.strokeStyle = color;
+                    drawingContext.lineWidth = lineWidth;
+                    drawingContext.lineTo(x, y);
+                    drawingContext.stroke();
+                    // reset drawing start position to current position.
+                    drawStartPos_temp.set(x, y);
+                }
+            }
+            else {
+                drawingContext.closePath()
+                drawStartPos_temp.set(0, 0);
+                // saveState
+                const image = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
+                undoStack.push(image);
+
+                //暫存圖檔
+                save_image()
+            }
+            break;
+        case "undo":
+            if (undoStack.length > 1) {
+                undoStack.pop();
+                let prevState = undoStack[undoStack.length - 1]
+                drawingContext.putImageData(prevState, 0, 0);
+
+                //暫存圖檔
+                save_image()
+            }
+            break;
+        case "clear":
+            drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
+            break;
+    }
+}
+function set_draw_cb(_draw_cb) {
+    draw_cb = _draw_cb
+}
+
 export {
     addCanvasInit,
     addShapeInit,
@@ -656,4 +671,7 @@ export {
     draw_shape_func,
     undo_canvas_func,
     clear_canvas_func,
+
+    update_draw_info,
+    set_draw_cb,
 };

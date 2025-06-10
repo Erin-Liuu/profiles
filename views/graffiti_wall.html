@@ -10,6 +10,7 @@
     <script src="/include/jquery@3.3.1/jquery.min.js"></script>
     <script src="/include/jqueryui@1.13.0/jquery-ui.min.js"></script>
     <script src="/include/js.cookie.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <style>
     @import url(/node_modules/cesium/Build/Cesium/Widgets/widgets.css);
@@ -67,8 +68,9 @@
         top: 0;
         z-index: 0;
         background-image: radial-gradient(#ccc 1px, transparent 0);
-  background-size: 20px 20px; /* 間格寬高 */
-  background-repeat: repeat;
+        background-size: 20px 20px;
+        /* 間格寬高 */
+        background-repeat: repeat;
     }
 
     .controlButtn {
@@ -235,6 +237,7 @@
 
     <script>
         // window['tab_type'] = "<%=type%>"
+        window['player_id'] = "<%=player_id%>" * 1
     </script>
 
     <script type="module" src="../src/graffiti_wall.js"></script>

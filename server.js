@@ -103,8 +103,10 @@ folderInit.init().then(function () {
 
         const appRouter = require('./router/app.router');
         const testRouter = require('./router/test.router');
+        const fileRouter = require('./router/file.router');
         app.use('/app', appRouter);
         app.use('/test', testRouter);
+        app.use('/file', fileRouter);
 
 
         if (argv.static) {
@@ -170,5 +172,33 @@ folderInit.init().then(function () {
                 process.exit(1);
             }
         });
+
+        let socket_io = null
+        function socket_init() {
+            var prom = new Promise((resolve, reject) => {
+                socket_io = require('socket.io')(server, {
+                    cors: {
+                        origin: '*',
+                    }
+                });
+
+                resolve(0)
+                // io.sockets.on('connection', function (socket) {
+                // })
+            });
+            return prom;
+        }
+
+
+        socket_init().then(function () {
+            socket_io.sockets.on('connection', function (socket) {
+                console.log('A user connected');
+
+                socket.on('send_draw_message', (data) => {
+                    socket.broadcast.emit('receive_draw_message', data); // 送給其他 client（不含自己）
+                });
+            })
+        })
+
     })();
 })

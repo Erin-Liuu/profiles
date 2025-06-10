@@ -1,7 +1,11 @@
 import * as draw_manage from './draw_manage.js'
 
+let socket = io();
+
 all_init()
 function all_init() {
+    const player_id = window['player_id']
+
     dom_listen()
     init()
     function init() {
@@ -15,6 +19,18 @@ function all_init() {
         draw_manage.set_listen_func(that)
 
         //TODO多人協作
+        socket.on('receive_draw_message', (data) => {
+            draw_manage.update_draw_info(data)
+            // console.log('Received from another page (via server):', msg);
+        })
+
+        draw_manage.set_draw_cb(function (data) {
+            // console.log("data");
+            // console.log(data);
+            // update_draw_info(data)
+            socket.emit('send_draw_message',data)
+
+        })
     }
 
     function dom_listen() {
