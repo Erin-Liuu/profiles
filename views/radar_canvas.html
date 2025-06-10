@@ -12,7 +12,7 @@
             minimum-scale=1, user-scalable=no" />
 
     <title>雷達圖</title>
-    <script src="/node_modules/@tweenjs/tween.js/src/Tween.js"></script>
+    <!-- <script src="/node_modules/@tweenjs/tween.js/src/Tween.js"></script> -->
     <script src="/include/jquery@3.3.1/jquery.min.js"></script>
     <!-- <script src="/include/require@2.3.6/require.js"></script> -->
     <style>
@@ -30,33 +30,52 @@
             font-family: Microsoft JhengHei;
         }
 
-        #threeContainer {
+        .mapInfoDiv {
             position: absolute;
-            left: 0;
+            left: 5%;
+            bottom: 0;
+            color: #fff;
+        }
+
+        .mapInfoDiv p {
+            font-size: 30px;
+        }
+
+        .map_canvas {
+            position: absolute;
             top: 0;
-            z-index: 0;
+            left: 0;
         }
     </style>
 </head>
 
 <body>
-    <div id="threeContainer" style="z-index: -1;"></div>
+    <canvas class="map_canvas" id="geoMap" style="z-index: -9;"></canvas>
+    <canvas class="map_canvas" id="radar" style="z-index: -10;"></canvas>
+    <canvas class="map_canvas" id="ship" style="z-index: -8; display: none;"></canvas>
+
     <div id="location" style="position: absolute; top: 20px">
         經度 <input id="lon" type="number" min="0.0" step="0.0004">
         緯度 <input id="lat" type="number" min="0.0" step="0.0004">
     </div>
     <div style="position: absolute; top: 80px">
-        縮放 <select id="scale">    
+        縮放 <select id="scale">
             <option>0.5</option>
             <option selected>1.0</option>
             <option>1.5</option>
             <option>2.0</option>
         </select>
     </div>
-    <button>原點</button>
-    <canvas id="geoMap" style="position: absolute; top: 10%; right: 10%; z-index: 150;"></canvas>
-    <canvas id="radar" style="position: absolute; top: 10%; left: 30%; z-index: 100;"></canvas>
-    <canvas id="ship" style="position: absolute; top: 10%; left: 5%; z-index: 170; display: none;"></canvas>
+
+    <div class="mapInfoDiv">
+        <p>基隆沿岸</p>
+        <button id="map_center_origin">初始位置</button>
+        <div>
+            <p>經度 <span id="map_center_lon"></span></p>
+            <p>緯度 <span id="map_center_lat"></span></p>
+        </div>
+    </div>
+
 
     <script type="importmap">
             {

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evie</title>
+    <link rel="stylesheet" href="../styles/website_common.css">
+
+    <!-- <link rel="icon" href="../media/img/logo_new.png" type="image"> -->
+    <!-- <script src="/include/turf.min.js"></script> -->
+    <script src="/node_modules/@tweenjs/tween.js/src/Tween.js"></script>
+    <script src="/include/jquery@3.3.1/jquery.min.js"></script>
+    <script src="/include/jqueryui@1.13.0/jquery-ui.min.js"></script>
+</head>
+<style>
+    /* @import url(/node_modules/cesium/Build/Cesium/Widgets/widgets.css); */
+</style>
+
+<body>
+
+    <!--==================== HEADER ====================-->
+    <div class="header-container">
+        <header class="navbar">
+            <nav class="nav-links">
+                <ul class="main-menu">
+                    <a href="#home">首頁</a>
+                    <a href="#about">關於我</a>
+                    <a href="#skills">技能</a>
+                    <a href="#work">作品</a>
+                    <!-- <a href="#contact">聯絡我</a> -->
+                </ul>
+            </nav>
+        </header>
+    </div>
+
+    <div class="main-container">
+        <section class="main-section" id="home">
+            <h1>歡迎來到我的網站</h1>
+            <iframe class="homeIframe" id="home_iframe" src="../test/dissolve_effect_text"></iframe>
+        </section>
+        <section class="main-section" id="about">
+            <h2>關於我</h2>
+            <img class="about-photo" src="/media/img/skybox/sky/left.jpg" alt="頭像">
+            <div></div>
+        </section>
+        <section class="main-section" id="skills">
+            <h2>技能</h2>
+            <div class="skillsContainer">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>2021 年 6 月</h3>
+                            <p>國立中央大學大氣科學學系畢業，獲得學士學位。</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>2023 年 07 月</h3>
+                            <p>大氣科學學系碩士班畢業，獲得碩士學位。</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>2023 年 10 月</h3>
+                            <p>開始第一份工作，擔任助理工程師。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-skill">
+                    <div class="skill-description">
+                        <h2>我的職涯歷程</h2>
+                        <p>在研究所期間，著重在雷達觀測資料的應用，進行定量降水估計相關的研究。除了事先閱讀並整理大量的參考文獻，還需要透過一系列的品質控管步驟，取得原始雷達資料中較可靠的資訊，隨後對於方法以及其所產生的結果進行評估。這些經驗使我有條理地剖析問題，並適時調整策略，在過程中也沉浸在數據分析帶來的成就感，不斷嘗試解決問題並且發現新的挑戰；同時累積溝通和寫作方面的經驗，加強了報告表達技巧與撰寫研究報告的能力。
+                        </p>
+                    </div>
+                    <div class="skill-description">
+                        <h2>我的職涯歷程</h2>
+                        <p>2</p>
+                    </div>
+                    <div class="skill-description">
+                        <h2>我的職涯歷程</h2>
+                        <p>3</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="main-section" id="work">
+            <h2>作品</h2>
+            <div class="workContainer">
+                <section class="project">
+                    <img src="../media/img/demo/radar_canvas.png" alt="作品1" />
+                    <div class="project-text">
+                        <h2>動態雷達偵測圖</h2>
+                        <p>這是作品1的介紹，描述它的特點與亮點。</p>
+                        <div class="link-block">
+                            <a class="link-btn" href="/test/radar_canvas" target="_blank">DEMO</a>
+                            |
+                            <a class="link-btn" href="">CODE</a>
+                        </div>
+                    </div>
+                </section>
+                <section class="project">
+                    <img src="../media/img/demo/graffiti_wall.png" alt="作品1" />
+                    <div class="project-text">
+                        <h2>塗鴉牆</h2>
+                        <p>這是作品1的介紹，描述它的特點與亮點。</p>
+                        <p>適用在滑鼠及觸控控制</p>
+                        <p>多人協作</p>
+                        <div class="link-block">
+                            <a class="link-btn" href="/test/graffiti_wall" target="_blank">DEMO</a> |
+                            <a class="link-btn" href="">CODE</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </section>
+
+        <!-- <section id="contact"></section> -->
+    </div>
+
+    <!--==================== FOOTER ====================-->
+    <div class="footer-container"></div>
+
+
+    <!--importmap--瀏覽器功能--自定義導入時使用的路徑映射-->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "../node_modules/three/build/three.module.js",
+        "three/addons/": "../node_modules/three/examples/jsm/",
+        "three/src/": "../node_modules/three/src/",
+        "three/examples/": "../node_modules/three/examples/"
+      }
+    }
+    </script>
+
+    <script>
+        // window['tab_type'] = "<%=type%>"
+    </script>
+
+    <script type="module" src="../src/main_profile.js"></script>
+</body>
+
+
+</html>

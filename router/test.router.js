@@ -14,6 +14,11 @@ router.get('/graffiti_wall', function (req, res) {
 router.get('/radar_canvas', function (req, res) {
     res.render('radar_canvas.html', {})
 })
+router.get('/dissolve_effect_text', function (req, res) {
+    res.render('dissolve_effect_text.html', {
+        ver: '1.0',
+    });
+})
 
 
 module.exports = router;

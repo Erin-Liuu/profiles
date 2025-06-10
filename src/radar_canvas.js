@@ -102,45 +102,12 @@ function load_json(url) {
 let geoLon = 121.7892478369434
 let geoLat = 25.14995702553833
 let center_m_inverse
+const width = window.parent.innerWidth * 4
+const height = window.parent.innerHeight * 4
+// const width = 2500 
+// const height = 3200
 
-window['get_center_pos'] = function (pos) {
-    // pos[0] = (pos[0] * 1).toFixed(5)
-    // pos[1] = (pos[1] * 1).toFixed(5)
-    // if (geoLon == pos[0] && geoLat == pos[1]) return;
 
-    $("#lon").val(pos[0]);
-    $("#lat").val(pos[1]);
-    geoLon = $("#lon").val();
-    geoLat = $("#lat").val();
-    scan_update = true
-}
-window['canvas'] = function () { return canvas }
-window['radio_pos'] = function (direction, direction_, right, right_,) {
-    if (canvasW && canvasH && geoLon && geoLat) {
-        // let cneter_point = new Cesium.Cartesian3.fromDegrees(121.7892478369434, 25.14995702553833, 0)
-        let cneter_point = new Cesium.Cartesian3.fromDegrees(geoLon, geoLat)
-
-        // let direction = new Cesium.Cartesian3()
-        // Cesium.Matrix4.multiplyByPointAsVector(new Cesium.Transforms.eastNorthUpToFixedFrame(cneter_point), new Cesium.Cartesian3(0, 1, 0), direction)
-        // Cesium.Cartesian3.normalize(direction, direction)
-        // let direction_ = new Cesium.Cartesian3.multiplyByScalar(direction, -1, new Cesium.Cartesian3())
-
-        // let right = new Cesium.Cartesian3()
-        // Cesium.Matrix4.multiplyByPointAsVector(new Cesium.Transforms.eastNorthUpToFixedFrame(cneter_point), new Cesium.Cartesian3(1, 0, 0), right)
-        // Cesium.Cartesian3.normalize(right, right)
-        // let right_ = new Cesium.Cartesian3.multiplyByScalar(right, -1, new Cesium.Cartesian3())
-
-        var pos1 = Cesium.Cartesian3.add(cneter_point, new Cesium.Cartesian3.multiplyByScalar(direction, canvasH / 2, new Cesium.Cartesian3()), new Cesium.Cartesian3())
-        Cesium.Cartesian3.add(pos1, new Cesium.Cartesian3.multiplyByScalar(right_, canvasW / 2, new Cesium.Cartesian3()), pos1)
-        var pos2 = Cesium.Cartesian3.add(cneter_point, new Cesium.Cartesian3.multiplyByScalar(direction, canvasH / 2, new Cesium.Cartesian3()), new Cesium.Cartesian3())
-        Cesium.Cartesian3.add(pos2, new Cesium.Cartesian3.multiplyByScalar(right, canvasW / 2, new Cesium.Cartesian3()), pos2)
-        var pos3 = Cesium.Cartesian3.add(cneter_point, new Cesium.Cartesian3.multiplyByScalar(direction_, canvasH / 2, new Cesium.Cartesian3()), new Cesium.Cartesian3())
-        Cesium.Cartesian3.add(pos3, new Cesium.Cartesian3.multiplyByScalar(right, canvasW / 2, new Cesium.Cartesian3()), pos3)
-        var pos4 = Cesium.Cartesian3.add(cneter_point, new Cesium.Cartesian3.multiplyByScalar(direction_, canvasH / 2, new Cesium.Cartesian3()), new Cesium.Cartesian3())
-        Cesium.Cartesian3.add(pos4, new Cesium.Cartesian3.multiplyByScalar(right_, canvasW / 2, new Cesium.Cartesian3()), pos4)
-        return [pos1, pos2, pos3, pos4];
-    } else { return []; }
-}
 
 all_init()
 function all_init() {
@@ -168,14 +135,16 @@ function all_init() {
 
             $("#lon").val(geoLon)
             $("#lat").val(geoLat)
+            $("#map_center_lon").text(geoLon.toFixed(4))
+            $("#map_center_lat").text(geoLat.toFixed(4))
 
-            canvasW = 2500 //m 
-            canvasH = 3200 //m
+            canvasW = width //m 
+            canvasH = height //m
             scale = 1.0
 
             let res = await load_json("../data/ship_coastal/Polygon_0353.json")
             geoData = res.data
-            console.log(geoData);
+            // console.log(geoData);
         }
 
         // radar_focus_scan()
@@ -233,12 +202,25 @@ function all_init() {
                     move(0, step);
                     break;
             }
+
+            $("#map_center_lon").text(geoLon.toFixed(4))
+            $("#map_center_lat").text(geoLat.toFixed(4))
         }
         function move(up, right) {
+            if (
+                geoLon + right < 121.7584 ||
+                geoLat + up < 25.145
+            ) return
+
             scan_update = true
             geoLon += right
             geoLat += up
         }
+        $("#map_center_origin").on("click", function () {
+            scan_update = true
+            geoLon = 121.7892478369434
+            geoLat = 25.14995702553833
+        })
         $("#location").on("change", function () {
             scan_update = true
             geoLon = $("#lon").val() * 1
@@ -257,12 +239,12 @@ function all_init() {
         const center_m = Cesium.Transforms.eastNorthUpToFixedFrame(center_point)   //以 center_point 為中心的局部參考框架，（ENU）坐標系建立
         center_m_inverse = Cesium.Matrix4.inverse(center_m, new Cesium.Matrix4())
 
-        geoCanvas.width = 2500 / 4
-        geoCanvas.height = 3200 / 4
-        // canvas.width = 2500 / 4
-        // canvas.height = 3200 / 4
-        shipCanvas.width = 2500 / 4
-        shipCanvas.height = 3200 / 4
+        geoCanvas.width = width / 4
+        geoCanvas.height = height / 4
+        // canvas.width = width / 4
+        // canvas.height = height / 4
+        shipCanvas.width = width / 4
+        shipCanvas.height = height / 4
 
 
         let hueStart = 120
@@ -338,12 +320,12 @@ function all_init() {
         const center_m = Cesium.Transforms.eastNorthUpToFixedFrame(center_point)   //以 center_point 為中心的局部參考框架，（ENU）坐標系建立
         center_m_inverse = Cesium.Matrix4.inverse(center_m, new Cesium.Matrix4())
 
-        geoCanvas.width = 2500 / 4
-        geoCanvas.height = 3200 / 4
-        canvas.width = 2500 / 4
-        canvas.height = 3200 / 4
-        shipCanvas.width = 2500 / 4
-        shipCanvas.height = 3200 / 4
+        geoCanvas.width = width / 4
+        geoCanvas.height = height / 4
+        canvas.width = width / 4
+        canvas.height = height / 4
+        shipCanvas.width = width / 4
+        shipCanvas.height = height / 4
 
 
         let hueStart = 120

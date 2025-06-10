@@ -3,8 +3,8 @@ var router = express.Router();
 var fs = require('fs');
 
 
-router.get('/noise', (req, res) => {
-    res.render('noise.html', {
+router.get('/main_profile', (req, res) => {
+    res.render('main_profile.html', {
         version: "v1.0",
     });
 })

@@ -1,0 +1,356 @@
+/* 字體 */
+@font-face {
+    font-family: 'CursedTimerUlil';
+    src: url('/media/font/cursed-timer-ulil-font/CursedTimerUlil-Aznm.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'KodeMono';
+    src: url('/media/font/Kode_Mono/KodeMono-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KodeMono';
+    src: url('/media/font/Kode_Mono/KodeMono-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KodeMono';
+    src: url('/media/font/Kode_Mono/KodeMono-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KodeMono';
+    src: url('/media/font/Kode_Mono/KodeMono-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* 全局設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-transform: uppercase;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+:root {
+    --primary-color: #4C9DFF;
+    --secondary-color: #3377CC;
+    --background-color: black;
+    --text-color: white;
+
+    /* 字體大小 */
+    --font-regular: 14px;
+    --font-hero: 60px;
+
+    /* 動畫 */
+    --ease: cubic-bezier(0.24, 1, 0.36, 1);
+    --duration: 0.4s;
+    --transition: var(--duration) var(--ease);
+    --transition-slow: 0.7s var(--ease);
+}
+
+/* 背景設定 */
+body {
+    background-color: var(--background-color);
+    /* background-color: black; */
+    color: var(--text-color);
+    text-align: center;
+    font-family: 'KodeMono';
+    overflow-x: clip;
+    user-select: none;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+section {
+    position: relative;
+    justify-items: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    /* background: rgba(0, 0, 0, 0.8); */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-links {
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: .25rem;
+    height: 3rem;
+    padding: 0 2rem;
+    position: relative;
+}
+
+.nav-links ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links ul.main-menu {
+    flex-shrink: 0;
+    gap: 2.5rem;
+    height: 100%;
+    justify-content: center;
+}
+
+.nav-links ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: var(--font-regular);
+    transition: 0.4s;
+}
+
+.main-menu a {
+    position: relative;
+    align-content: center;
+    cursor: pointer;
+    /* font-family: MonumentMono; */
+    font-weight: 400;
+    line-height: 120%;
+    text-transform: uppercase;
+}
+
+.main-menu a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    height: 2px;
+    background: var(--primary-color);
+    transform: translateX(-50%);
+    bottom: 0;
+    box-shadow: 0 3px 16px 1px var(--primary-color);
+    display: block;
+    height: 1px;
+    opacity: 0;
+    transition: opacity var(--transition), width var(--transition);
+    width: 0;
+}
+
+.main-menu a:hover::after {
+    opacity: 1;
+    width: 100%;
+}
+
+/* 主要 */
+.main-container {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: left;
+    padding-top: var(--font-hero);
+}
+
+.main-section {
+    padding: 25px;
+}
+
+/* -------------------------------- 
+
+Home
+
+-------------------------------- */
+.homeIframe {
+    display: flex;
+    height: 40vh;
+    width: 100%;
+    margin-top: 2vh;
+    border: none;
+}
+
+
+/* -------------------------------- 
+
+Work
+
+-------------------------------- */
+.workContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    width: 90%;
+}
+
+.project {
+    display: flex;
+    align-items: center;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.project img {
+    width: 40%;
+    height: 250px;
+    object-fit: cover;
+    /* padding: 20px; */
+}
+
+.project-text {
+    width: 60%;
+    padding: 20px;
+}
+
+.project:hover {
+    transform: scale(1.02);
+    /* transition: transform 0.3s ease; */
+    transition: var(--transition);
+    /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6); */
+    /* 加陰影增加層次感 */
+}
+
+.link-btn{
+    margin-top: auto;
+}
+.link-btn:hover {
+    color: #00bcd4;
+}
+
+/* -------------------------------- 
+
+About me
+
+-------------------------------- */
+.about-photo {
+    display: flex;
+    width: 200px;
+    /* height: 100px; */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #00bcd4;
+    /* 藍色邊框 */
+}
+
+.skillsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* 左右各佔 1/2 */
+    gap: 40px;
+    /* padding: 50px; */
+}
+
+.timeline {
+    position: relative;
+    margin: 50px auto;
+    padding: 20px;
+    width: 600px;
+}
+
+/* 中間的線條 */
+.timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 30px;
+    width: 4px;
+    height: 100%;
+    background-color: #888;
+}
+
+/* 每個事件的容器 */
+.timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+/* 點的樣式 */
+.timeline-dot {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 4px solid #888;
+    margin-right: 20px;
+    padding: 8px;
+    z-index: 10;
+}
+
+/* 文字內容 */
+.timeline-content {
+    background-color: #111;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    width: calc(80% - 80px);
+}
+
+.timeline-item:hover .timeline-dot {
+    transform: scale(1.2);
+    background-color: #7E57C2;
+    /* 使用亮色點綴 */
+    border-color: #593c8c;
+}
+
+/* Hover 時增加亮度 */
+.timeline-item:hover .timeline-content {
+    border-color: #00bcd4;
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+}
+
+
+.skill-description {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+}
+
+.skill-description.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 響應式 */
+@media screen and (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+        /* 手機版顯示漢堡按鈕 */
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--font-hero);
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .nav-links ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-links.show {
+        display: block;
+    }
+}
