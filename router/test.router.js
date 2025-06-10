@@ -11,6 +11,9 @@ router.get('/graffiti_wall', function (req, res) {
     });
     player_id = (player_id + 1) % 99;
 })
+router.get('/radar_canvas', function (req, res) {
+    res.render('radar_canvas.html', {})
+})
 
 
 module.exports = router;
