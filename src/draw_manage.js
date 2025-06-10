@@ -21,7 +21,11 @@ var colorNow = [0, 0, 0];
 var lineWidth = 1.5;
 var undoStack = []
 
-let drawStartPos_temp = new THREE.Vector2()
+//同步用
+let temp_info = {
+    drawStartPos: new THREE.Vector2(),
+    movePos: new THREE.Vector2(),
+}
 let draw_cb = function () { }
 
 let draw_list = []
@@ -469,6 +473,8 @@ function start_draw() {
 
             that.mouse_move1.toggle(true)
             that.mouse_up1.toggle(true)
+
+            draw_cb({ type: "shape", data: { paint: true, x, y } })
         },
         move_func: function (that, event, x, y) {
             let movePos = that.info.movePos.set(x, y)
@@ -514,6 +520,8 @@ function start_draw() {
                 // console.log(that.info.preImageData);
                 drawingContext.putImageData(that.info.preImageData, 0, 0)
                 drawingContext.drawImage(that.info.tempCanvas, 0, 0)
+
+                draw_cb({ type: "shape", data: { paint: true, x, y, shape_type: SHAPETYPE, color: that.info.color, lineWidth: that.info.lineWidth } })
             }
         },
         up_func: function (that, event) {
@@ -534,6 +542,8 @@ function start_draw() {
 
             //暫存圖檔
             save_image()
+
+            draw_cb({ type: "shape", data: { paint: false } })
         },
         clear: function (that) {
             that.mouse_down.toggle(false)
@@ -614,27 +624,104 @@ function addShapeInit() {
 function update_draw_info({ type, data }) {
     switch (type) {
         case "pen":
-            let { paint, x, y, color, lineWidth } = data
+            var { paint, x, y, color, lineWidth } = data
             if (paint) {
                 if (!color) {  //down
                     drawingContext.beginPath();
-                    drawStartPos_temp.set(x, y)
+                    temp_info.drawStartPos.set(x, y)
                 } else {
-                    drawingContext.moveTo(drawStartPos_temp.x, drawStartPos_temp.y);
+                    drawingContext.moveTo(temp_info.drawStartPos.x, temp_info.drawStartPos.y);
                     drawingContext.strokeStyle = color;
                     drawingContext.lineWidth = lineWidth;
                     drawingContext.lineTo(x, y);
                     drawingContext.stroke();
                     // reset drawing start position to current position.
-                    drawStartPos_temp.set(x, y);
+                    temp_info.drawStartPos.set(x, y);
                 }
             }
             else {
                 drawingContext.closePath()
-                drawStartPos_temp.set(0, 0);
+                temp_info.drawStartPos.set(0, 0);
                 // saveState
                 const image = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
                 undoStack.push(image);
+
+                //暫存圖檔
+                save_image()
+            }
+            break;
+        case "shape":
+            if (!temp_info.tempCanvas) {
+                const tempCanvas = document.createElement('canvas')
+                tempCanvas.width = window.parent.innerWidth;
+                tempCanvas.height = window.parent.innerHeight;
+
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.drawImage(drawingCanvas, 0, 0);
+
+                temp_info.tempCanvas = tempCanvas
+                temp_info.tempCtx = tempCtx
+            }
+
+            var { paint, x, y, shape_type, color, lineWidth } = data
+            if (paint) {
+                if (!color) {  //down
+                    temp_info.drawStartPos.set(x, y)
+                    temp_info.preImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
+
+                    temp_info.tempCtx.clearRect(0, 0, temp_info.tempCanvas.width, temp_info.tempCanvas.height)
+                    temp_info.tempCtx.beginPath();
+                } else {
+                    let movePos = temp_info.movePos.set(x, y)
+                    const centerX = (movePos.x + temp_info.drawStartPos.x) / 2
+                    const centerY = (movePos.y + temp_info.drawStartPos.y) / 2
+                    const radiusX = movePos.distanceTo(temp_info.drawStartPos) / 2
+                    const rotation = 0;  // 旋轉角度
+                    const startAngle = 0; // 起始角度
+                    const endAngle = Math.PI * 2
+                    let width = Math.abs(movePos.x - temp_info.drawStartPos.x)
+                    let height = Math.abs(movePos.y - temp_info.drawStartPos.y)
+
+                    const tempCtx = temp_info.tempCtx
+                    tempCtx.clearRect(0, 0, temp_info.tempCanvas.width, temp_info.tempCanvas.height)
+                    tempCtx.strokeStyle = color
+                    tempCtx.fillStyle = color
+                    tempCtx.lineWidth = lineWidth
+                    if (shape_type == 0) {
+                        tempCtx.ellipse(centerX, centerY, radiusX, radiusX, rotation, startAngle, endAngle)
+                    }
+                    else if (shape_type == 1) {
+                        if (temp_info.drawStartPos.y < centerY) {
+                            if (temp_info.drawStartPos.x < centerX)
+                                tempCtx.rect(temp_info.drawStartPos.x, temp_info.drawStartPos.y, width, height);
+                            else
+                                tempCtx.rect(movePos.x, temp_info.drawStartPos.y, width, height);
+
+                        }
+                        else {
+                            if (temp_info.drawStartPos.x < centerX)
+                                tempCtx.rect(temp_info.drawStartPos.x, movePos.y, width, height);
+                            else
+                                tempCtx.rect(movePos.x, movePos.y, width, height);
+
+                        }
+                        // tempCtx.rect(centerX, centerY, width, height);  //左上角
+                    }
+                    tempCtx.stroke()
+                    tempCtx.closePath()
+                    tempCtx.beginPath();
+
+                    //歷史資訊
+                    // console.log(temp_info.preImageData);
+                    drawingContext.putImageData(temp_info.preImageData, 0, 0)
+                    drawingContext.drawImage(temp_info.tempCanvas, 0, 0)
+                }
+            }
+            else {
+                temp_info.tempCtx.closePath()
+                drawingContext.drawImage(temp_info.tempCanvas, 0, 0)
+                // saveState
+                undoStack.push(drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height));
 
                 //暫存圖檔
                 save_image()

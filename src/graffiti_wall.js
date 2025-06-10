@@ -19,17 +19,16 @@ function all_init() {
         draw_manage.set_listen_func(that)
 
         //TODO多人協作
-        socket.on('receive_draw_message', (data) => {
-            draw_manage.update_draw_info(data)
-            // console.log('Received from another page (via server):', msg);
+        socket.on('receive_draw_message', (_data) => {
+            // console.log(_data);
+
+            draw_manage.update_draw_info(_data)
         })
 
-        draw_manage.set_draw_cb(function (data) {
+        draw_manage.set_draw_cb(function (_data) {
             // console.log("data");
-            // console.log(data);
-            // update_draw_info(data)
-            socket.emit('send_draw_message',data)
-
+            // console.log(_data);
+            socket.emit('send_draw_message', _data)
         })
     }
 
