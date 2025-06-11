@@ -156,18 +156,62 @@ section {
     width: 100%;
 }
 
+.social-icons {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    display: flex;
+    gap: 15px;
+    z-index: 1050;
+}
+
+
 /* 主要 */
 .main-container {
-    /* display: flex; */
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     text-align: left;
     padding-top: var(--font-hero);
 }
 
+/* 底部 */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #222;
+    color: #fff;
+    font-size: 16px;
+}
+
+.footer-container a {
+    color: #fff;
+    margin-left: 15px;
+    font-size: 24px;
+    transition: color 0.3s ease;
+}
+
 .main-section {
     padding: 25px;
+}
+
+.sectionColor1 {
+    background-color: #000;
+    color: #fff;
+}
+
+.sectionColor2 {
+    background-color: #fff;
+    color: #000;
+}
+
+.sectionColor3 {
+    background-color: grey;
+    color: #fff;
+}
+
+.sectionColor4 {
+    background-color: #000;
+    color: #fff;
 }
 
 /* -------------------------------- 
@@ -178,11 +222,21 @@ Home
 .homeIframe {
     display: flex;
     height: 40vh;
-    width: 100%;
+    width: 110%;
     margin-top: 2vh;
     border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
+#home {
+    position: relative;
+    width: 100%;
+    height: 65vh;
+}
 
 /* -------------------------------- 
 
@@ -225,9 +279,10 @@ Work
     /* 加陰影增加層次感 */
 }
 
-.link-btn{
+.link-btn {
     margin-top: auto;
 }
+
 .link-btn:hover {
     color: #00bcd4;
 }
@@ -243,23 +298,28 @@ About me
     /* height: 100px; */
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #00bcd4;
-    /* 藍色邊框 */
+    border: 4px solid #fff;
+
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, -50%);
 }
 
-.skillsContainer {
+.aboutContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* 左右各佔 1/2 */
-    gap: 40px;
-    /* padding: 50px; */
+    grid-template-columns: 1fr 1.1fr;
+    /* 左右各佔 比例 */
+    /* gap: 40px; */
+    padding: 50px;
 }
 
 .timeline {
     position: relative;
-    margin: 50px auto;
+    /* margin: 50px auto; */
     padding: 20px;
-    width: 600px;
+    /* width: 600px; */
 }
 
 /* 中間的線條 */
@@ -298,7 +358,8 @@ About me
     padding: 20px;
     border-radius: 8px;
     border: 1px solid #555;
-    width: calc(80% - 80px);
+    width: calc(85% - 80px);
+    color: #fff;
 }
 
 .timeline-item:hover .timeline-dot {
@@ -315,16 +376,38 @@ About me
 }
 
 
-.skill-description {
+.about-description {
     position: absolute;
+    width: 40%;
     opacity: 0;
     transform: translateY(50px);
     transition: all 0.8s ease;
 }
 
-.skill-description.active {
+.about-description.active {
     opacity: 1;
     transform: translateY(0);
+}
+
+.about-description p,
+.about-description li {
+    text-align: justify;
+    word-wrap: break-word;
+    white-space: normal;
+    text-transform: none;
+}
+
+/* -------------------------------- 
+
+Footer
+
+-------------------------------- */
+.icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 100%;
 }
 
 /* 響應式 */

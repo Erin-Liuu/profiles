@@ -12,6 +12,7 @@
     <script src="/node_modules/@tweenjs/tween.js/src/Tween.js"></script>
     <script src="/include/jquery@3.3.1/jquery.min.js"></script>
     <script src="/include/jqueryui@1.13.0/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <style>
     /* @import url(/node_modules/cesium/Build/Cesium/Widgets/widgets.css); */
@@ -26,7 +27,7 @@
                 <ul class="main-menu">
                     <a href="#home">首頁</a>
                     <a href="#about">關於我</a>
-                    <a href="#skills">技能</a>
+                    <a href="#skills">專業技能</a>
                     <a href="#work">作品</a>
                     <!-- <a href="#contact">聯絡我</a> -->
                 </ul>
@@ -34,19 +35,24 @@
         </header>
     </div>
 
+    <div class="social-icons">
+        <a href="">
+            <i class="fa-brands fa-github"></i>
+        </a>
+        <a href="">
+            <i class="fa-solid fa-envelope"></i>
+        </a>
+    </div>
+
     <div class="main-container">
-        <section class="main-section" id="home">
-            <h1>歡迎來到我的網站</h1>
+        <section class="main-section sectionColor1" id="home">
+            <!-- <h1>歡迎來到我的網站</h1> -->
             <iframe class="homeIframe" id="home_iframe" src="../test/dissolve_effect_text"></iframe>
+            <img class="about-photo" id="self_photo" src="/media/img/skybox/sky/left.jpg" alt="頭像">
         </section>
-        <section class="main-section" id="about">
-            <h2>關於我</h2>
-            <img class="about-photo" src="/media/img/skybox/sky/left.jpg" alt="頭像">
-            <div></div>
-        </section>
-        <section class="main-section" id="skills">
-            <h2>技能</h2>
-            <div class="skillsContainer">
+        <section class="main-section sectionColor2" id="about">
+            <h2 style="margin-top: 110px;">關於我</h2>
+            <div class="aboutContainer">
                 <div class="timeline">
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
@@ -65,29 +71,62 @@
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
                         <div class="timeline-content">
-                            <h3>2023 年 10 月</h3>
-                            <p>開始第一份工作，擔任助理工程師。</p>
+                            <h3>2023 年 10 月 - 2023 年 06 月</h3>
+                            <p>開始第一份工作，擔任系統前端工程師。</p>
                         </div>
                     </div>
                 </div>
-                <div class="timeline-skill">
-                    <div class="skill-description">
+                <div class="timeline-about">
+                    <div class="about-description">
                         <h2>我的職涯歷程</h2>
-                        <p>在研究所期間，著重在雷達觀測資料的應用，進行定量降水估計相關的研究。除了事先閱讀並整理大量的參考文獻，還需要透過一系列的品質控管步驟，取得原始雷達資料中較可靠的資訊，隨後對於方法以及其所產生的結果進行評估。這些經驗使我有條理地剖析問題，並適時調整策略，在過程中也沉浸在數據分析帶來的成就感，不斷嘗試解決問題並且發現新的挑戰；同時累積溝通和寫作方面的經驗，加強了報告表達技巧與撰寫研究報告的能力。
+                        <p>
+                            修習相關課程，不斷精進我的程式能力，包括程式語言 C 系列、地理資訊系統導論、資料庫管理，
+                            以及氣象與人工智慧(Python)等，且選修系上專題課，有助於提升熟練程度、並縮短學習速度。
+                            在大學期間，完成地球科學資訊學分學程。
                         </p>
                     </div>
-                    <div class="skill-description">
+                    <div class="about-description">
                         <h2>我的職涯歷程</h2>
-                        <p>2</p>
+                        <p>
+                            在研究所期間，著重在雷達觀測資料的應用，進行定量降水估計相關的研究。
+                            除了事先閱讀並整理大量的參考文獻，還需要透過一系列的品質控管步驟，
+                            取得原始雷達資料中較可靠的資訊，隨後對於方法以及其所產生的結果進行評估。
+                            這些經驗使我有條理地剖析問題，並適時調整策略，在過程中也沉浸在數據分析帶來的成就感，
+                            不斷嘗試解決問題並且發現新的挑戰；
+                            同時累積溝通和寫作方面的經驗，加強了報告表達技巧與撰寫研究報告的能力。
+                        </p>
                     </div>
-                    <div class="skill-description">
-                        <h2>我的職涯歷程</h2>
-                        <p>3</p>
+                    <div class="about-description">
+                        <h2>工作內容</h2>
+                        <p>
+                            具三維視覺化的網頁應用，採JavaScript、HTML 搭配Three.js 函示庫、WebGL技術實現
+                            <br />
+                        <ul>
+                            <li>與後端工程師與設計團隊協作，負責UX功能建置與整合，包括透過AJAX串接後端 API、ECharts資料視覺化圖表導入。</li>
+                            <li>運用 Cesium 平台結合實際地理資料，進行三維場景重建與空間定位，還原真實環境配置。</li>
+                            <li>以 Three.js 開發多項視覺模組，實現導航引導、場景消融等互動效果。</li>
+                            <li>參與 AR/VR WebXR應用技術研發，涵蓋視覺渲染技術與互動設計。</li>
+                        </ul>
+                        </p>
+                        <br />
+                        <h2>工作成就</h2>
+                        <p>
+                        <ul>
+                            <li>研究並導入CSM技術(Cascaded Shadow Maps, 階層式陰影投影)，成功提升大場域場景中的陰影真實感。</li>
+                            <li>優化三維物件動態生成流程，提升系統整體效能約達 10%。</li>
+                        </ul>
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="main-section" id="work">
+        <section class="main-section sectionColor3" id="skills">
+            <h2>專業技能</h2>
+            <div class="skillsContainer">
+
+            </div>
+        </section>
+        <section class="main-section sectionColor4" id="work">
             <h2>作品</h2>
             <div class="workContainer">
                 <section class="project">
@@ -123,7 +162,16 @@
     </div>
 
     <!--==================== FOOTER ====================-->
-    <div class="footer-container"></div>
+    <div class="footer-container">
+        <div class="icon-wrapper">
+            <a href="">
+                <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+        </div>
+    </div>
 
 
     <!--importmap--瀏覽器功能--自定義導入時使用的路徑映射-->

@@ -52,7 +52,8 @@ let clock = new THREE.Clock()
 
 let font = null
 let font_list = {}
-const font_url = '../media/font/Microsoft_JhengHei_Regular.json'
+// const font_url = '../media/font/Microsoft_JhengHei_Regular.json'
+const font_url = '../media/font/Mansalva_Regular.json'
 let text_info = {
     size: 100,
     height: 20,
@@ -70,6 +71,7 @@ let count = 0
 let test_flag = false
 const params = {
     edgeColor: 'rgb(0, 255, 255)',//0xd27b00,
+    // edgeColor: 'rgb(255, 0, 0)',//0xd27b00,
     scale: 1,
     threshold: 0.0,
     edgeWidth: 0.03,
@@ -145,7 +147,7 @@ async function init() {
     renderer.setSize(window.innerWidth, window.innerHeight) // 場景大小
     // renderer.setClearColor(0x000, 1.0) // 預設背景顏色
     renderer.setClearColor(0xffffff, 1.0) // 預設背景顏色
-    // renderer.shadowMap.enable = true // 陰影效果
+    renderer.shadowMap.enable = true // 陰影效果
     // renderer.sortObjects = false; //渲染順序
     // renderer.localClippingEnabled = true;
 
@@ -392,17 +394,40 @@ async function init() {
     )
     scene.add(backBox)
 
-    let light = new THREE.AmbientLight(0xffffff, 3); // white light
+    let light = new THREE.AmbientLight(0xffffff, 2); // white light
     scene.add(light);
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(0, 100, 15);
+    scene.add(directionalLight);
+    directionalLight.target.position.set(0, -10, 0);
+    scene.add(directionalLight.target);
 
-    var planeGeometry = new THREE.PlaneGeometry(1000, 1000)
+    directionalLight.castShadow = true
+
+    //Set up shadow properties for the light
+    directionalLight.shadow.mapSize.width = 1024; // default
+    directionalLight.shadow.mapSize.height = 1024; // default
+    directionalLight.shadow.camera.bottom = -100; // default
+    directionalLight.shadow.camera.left = -100; // default
+    directionalLight.shadow.camera.top = 100; // default
+    directionalLight.shadow.camera.right = 100; // default
+    directionalLight.shadow.camera.near = 0.01; // default
+    directionalLight.shadow.camera.far = 500; // default
+    directionalLight.shadow.bias = -0.001
+
+    const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+    scene.add(helper);
+    helper.update();
+
+    var planeGeometry = new THREE.PlaneGeometry(5000, 1000)
     var planeMaterial = new THREE.MeshStandardMaterial({
         color: 0xffffff,
     })
     let bottom_plane = new THREE.Mesh(planeGeometry, planeMaterial)
     bottom_plane.rotation.x = -0.5 * Math.PI // 使平面與 y 軸垂直，並讓正面朝上
-    bottom_plane.position.set(0, 0, 0)
-    // scene.add(bottom_plane);
+    bottom_plane.position.set(0, -1, 0)
+    bottom_plane.receiveShadow = true
+    scene.add(bottom_plane);
 
 
     //js初始化
@@ -514,6 +539,7 @@ function dissolve_effect(obj) {
     obj.traverse((o) => {
         if (o.isMesh) {
             // console.log(o.material);
+            o.castShadow = true
             o.material.onBeforeCompile = function (shader) {
                 // console.log(shader);
                 // return

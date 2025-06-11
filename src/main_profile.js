@@ -10,8 +10,8 @@ function dom_listen() {
         let index = $(this).index(".timeline-item") * 1
         // console.log(index);
 
-        $(".skill-description").removeClass("active");
-        let target = $(".skill-description").eq(index)
+        $(".about-description").removeClass("active");
+        let target = $(".about-description").eq(index)
         target.addClass("active")
     })
 
