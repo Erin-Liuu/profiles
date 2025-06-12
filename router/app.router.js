@@ -9,4 +9,26 @@ router.get('/main_profile', (req, res) => {
     });
 })
 
+router.post("/weather", async (req, res) => {
+    try {
+        const apiKey = "CWA-AE0AD1F8-27E1-4F7C-B43C-64E108CF8DF8"
+        // const response = await fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=" + apiKey + "&StationId=466940&WeatherElement=", {
+        const response = await fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-049?Authorization=" + apiKey, {
+        // const response = await fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-B0075-002?Authorization=" + apiKey + "&StationID=C6B01", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // body: JSON.stringify(req.body),
+        });
+
+        const data = await response.json();
+        res.send({ success: true, data })
+
+    } catch (error) {
+        console.log(error);
+
+    }
+});
+
 module.exports = router;

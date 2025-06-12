@@ -28,23 +28,68 @@
             left: 0;
             z-index: 0;
             font-family: Microsoft JhengHei;
-        }
-
-        .mapInfoDiv {
-            position: absolute;
-            left: 5%;
-            bottom: 0;
-            color: #fff;
-        }
-
-        .mapInfoDiv p {
-            font-size: 30px;
+            color: white;
         }
 
         .map_canvas {
             position: absolute;
             top: 0;
             left: 0;
+        }
+
+        .mapInfoDiv {
+            position: absolute;
+            left: 4%;
+            bottom: 0;
+        }
+
+        #mapInfo_title {
+            font-size: 30px;
+        }
+
+        .mapInfoDiv p {
+            font-size: 25px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow:
+                0 0 5px #00ffff,
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 40px #0ff;
+
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        #map_center_origin {
+            font-weight: 700;
+            background: #2b2b2b;
+            border: 1px solid #444;
+            color: #00ffff;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .info {
+            position: absolute;
+            right: 0;
+            z-index: 2;
+            margin: 2.5vh 0.5vw;
+            width: 50vw;
+            height: 7vh;
+            display: grid;
+            grid-template-columns: repeat(11, 4.5vw);
+            /* column-gap: 0.1vw; */
+            /* background-color: red; */
+        }
+
+        /* info */
+        .info>div {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2vw;
+            padding: 0.9vh;
+            font-weight: 700;
+            border-radius: 0.5vh;
         }
     </style>
 </head>
@@ -54,11 +99,11 @@
     <canvas class="map_canvas" id="radar" style="z-index: -10;"></canvas>
     <canvas class="map_canvas" id="ship" style="z-index: -8; display: none;"></canvas>
 
-    <div id="location" style="position: absolute; top: 20px">
+    <div id="location" style="position: absolute; top: 20px; display: none;">
         經度 <input id="lon" type="number" min="0.0" step="0.0004">
         緯度 <input id="lat" type="number" min="0.0" step="0.0004">
     </div>
-    <div style="position: absolute; top: 80px">
+    <div style="position: absolute; top: 80px; display: none;">
         縮放 <select id="scale">
             <option>0.5</option>
             <option selected>1.0</option>
@@ -68,11 +113,26 @@
     </div>
 
     <div class="mapInfoDiv">
-        <p>基隆沿岸</p>
-        <button id="map_center_origin">初始位置</button>
+        <p id="mapInfo_title">基隆沿岸 <button id="map_center_origin">初始位置</button></p>
         <div>
             <p>經度 <span id="map_center_lon"></span></p>
             <p>緯度 <span id="map_center_lat"></span></p>
+        </div>
+    </div>
+
+    <div class="info">
+        <div style="font-weight: 900; color: white;">|</div>
+        <div>溫度</div>
+        <div id="temp_info"></div>
+        <div>濕度</div>
+        <div id="humd_info"></div>
+        <div>風速</div>
+        <div id="ws_info"></div>
+        <div>風向</div>
+        <div id="wd_info"></div>
+        <div>天氣</div>
+        <div id="weather_info" style="transform: scale(1, 1); ">
+            <img id="weather_icon" src="" style="width: 1.5vw;">
         </div>
     </div>
 

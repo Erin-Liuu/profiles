@@ -69,7 +69,9 @@ let scan_update = false
 const all_info = {
     sweepAngle: 270,  //掃描角度
     sweepSpeed: 0.8,   //掃描速度(度每毫秒)
-    sweepSize: 25   //掃描寬度
+    sweepSize: 25,   //掃描寬度
+
+    weather: {},
 }
 
 let loader = new THREE.FileLoader();
@@ -95,6 +97,19 @@ function load_json(url) {
         );
     })
 }
+function json_post(url, data) {
+    // data._csrf = $("#_csrf").val()
+    var jxhr = $.ajax({
+        url: url,
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        data: JSON.stringify(data),
+
+        timeout: 3 * 60 * 1000,
+    });
+    return jxhr;
+}
 
 // const center_point = Cesium.Cartesian3.fromDegrees(121.7892478369434, 25.14995702553833)
 
@@ -110,7 +125,7 @@ const height = window.parent.innerHeight * 4
 
 
 all_init()
-function all_init() {
+async function all_init() {
     // let index = []
     // let scale_ = []
     // let rotate_ = []
@@ -118,11 +133,16 @@ function all_init() {
 
     let preRender_funcs = {};
 
+    all_info.weather.data = (await json_post("/app/weather")).data  //每6小時更新
+    console.log(all_info.weather.data);
+
 
     init()
     render()
 
     async function init() {
+        get_CurrentWeather()
+
         {
             geoCanvas = document.getElementById("geoMap");
             gctx = geoCanvas.getContext("2d");
@@ -135,8 +155,8 @@ function all_init() {
 
             $("#lon").val(geoLon)
             $("#lat").val(geoLat)
-            $("#map_center_lon").text(geoLon.toFixed(4))
-            $("#map_center_lat").text(geoLat.toFixed(4))
+            $("#map_center_lon").text(geoLon.toFixed(4) + "°")
+            $("#map_center_lat").text(geoLat.toFixed(4) + "°")
 
             canvasW = width //m 
             canvasH = height //m
@@ -203,8 +223,8 @@ function all_init() {
                     break;
             }
 
-            $("#map_center_lon").text(geoLon.toFixed(4))
-            $("#map_center_lat").text(geoLat.toFixed(4))
+            $("#map_center_lon").text(geoLon.toFixed(4) + "°")
+            $("#map_center_lat").text(geoLat.toFixed(4) + "°")
         }
         function move(up, right) {
             if (
@@ -643,6 +663,123 @@ function all_init() {
         ctx.drawImage(shipCanvas, 0, 0);
 
     }
+
+    function get_CurrentWeather(cityid = "10017010") {
+        let d = all_info.weather.data.records.Locations[0]
+
+        let weather_data_ = null
+        let weather_data = {}     //最後資料
+        for (var k in d.Location) {
+            if (d.Location[k].Geocode == cityid) {
+                weather_data_ = d.Location[k]
+                break
+            }
+        }
+
+        let element_list = ["溫度", "相對濕度", "風速", "風向", "天氣現象"]
+
+        if (weather_data_) {
+            console.log(weather_data_);
+            for (var k in weather_data_.WeatherElement) {
+                let index = element_list.indexOf(weather_data_.WeatherElement[k].ElementName)
+                if (index != -1) {
+                    weather_data[element_list[index]] = get_CurrentHourData(weather_data_.WeatherElement[k].Time, element_list[index])
+                }
+            }
+        }
+        console.log(weather_data);
+
+        $("#temp_info").text(weather_data["溫度"] + "℃")
+        $("#humd_info").text(weather_data["相對濕度"] + "%")
+        $("#ws_info").text(weather_data["風速"] + " m/s")
+        $("#wd_info").text(weather_data["風向"])
+        var img_url = weather_picture(weather_data["天氣現象"], (new Date()).getHours())
+        if ($("#weather_icon").attr('src') != img_url) {
+            $("#weather_icon").attr('src', img_url)
+        }
+
+    }
+    function get_CurrentHourData(data, type) {
+        const now = new Date();
+        now.setMinutes(0, 0, 0);
+        const next_hour = new Date();
+        next_hour.setHours(now.getHours() + 1);
+
+
+        let past_data = data.filter(item => new Date(item.DataTime ? item.DataTime : item.StartTime) <= next_hour);
+        // console.log(past_data);
+
+
+        if (past_data.length === 0) return null;
+
+
+        let data_ = past_data.reduce((latest, current) => {
+            const latestTime = new Date(latest.DataTime);
+            const currentTime = new Date(current.DataTime);
+
+            const diffWithNow = Math.abs(latestTime - now);
+            if (diffWithNow < 1000) return latest;
+
+            //否則從中找出時間最大的那筆
+            return (currentTime > latestTime) ? current : latest;
+        });
+        // return data_.ElementValue[0]
+        return type == "天氣現象" ? Object.values(data_.ElementValue[0])[1] : Object.values(data_.ElementValue[0])[0]
+        // return data_
+    }
+    function weather_picture(weather_text, hour) {
+        var pre_img_url = "day/";
+        var img_url = "";
+
+        if (hour < 6 || 18 < hour) {
+            pre_img_url = "night/";
+        }
+
+        let weather_type = weatherCode2Type(weather_text * 1)
+        console.log(weather_type);
+
+        if (!weather_type) {
+            img_url = "../media/img/weather/loading.svg";
+        } else {
+            img_url = "../media/img/weather/" + pre_img_url + weather_type + ".svg";
+        }
+        return img_url
+
+
+        function weatherCode2Type(weatherCode) {
+            const weatherTypes = {
+                "thunderstorm": [15, 16, 17, 18, 21, 22, 33, 34, 35, 36, 41],
+                "clear": [1],
+                "cloudy-fog": [25, 26, 27, 28],
+                "cloudy": [2, 3, 4, 5, 6, 7],
+                "fog": [24],
+                "partially-clear-with-rain": [
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    19,
+                    20,
+                    29,
+                    30,
+                    31,
+                    32,
+                    38,
+                    39,
+                ],
+                "snowing": [23, 37, 42],
+            };
+            const [weatherType] =
+                Object.entries(weatherTypes).find(([weatherType, weatherCodes]) =>
+                    weatherCodes.includes(Number(weatherCode))
+                ) || [];
+
+            return weatherType;
+        };
+    };
 
     function render() {
         requestAnimationFrame(render)
