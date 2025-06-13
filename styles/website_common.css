@@ -37,7 +37,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 html {
@@ -82,6 +82,11 @@ body {
 section {
     position: relative;
     justify-items: center;
+}
+
+ul {
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .navbar {
@@ -159,10 +164,11 @@ section {
 .social-icons {
     position: absolute;
     top: 30px;
-    right: 50px;
+    right: 2vw;
     display: flex;
-    gap: 15px;
+    gap: 21px;
     z-index: 1050;
+    font-size: 20px;
 }
 
 
@@ -192,6 +198,12 @@ section {
 
 .main-section {
     padding: 25px;
+}
+
+.italic-text {
+    /* font-style: italic; */
+    display: inline-block;
+    transform: skewX(-10deg);
 }
 
 .sectionColor1 {
@@ -362,7 +374,8 @@ About me
     color: #fff;
 }
 
-.timeline-item:hover .timeline-dot {
+/* .timeline-item:hover .timeline-dot { */
+.timeline-dot.active {
     transform: scale(1.2);
     background-color: #7E57C2;
     /* 使用亮色點綴 */
@@ -380,6 +393,7 @@ About me
     position: absolute;
     width: 40%;
     opacity: 0;
+    line-height: 1.6;
     transform: translateY(50px);
     transition: all 0.8s ease;
 }
@@ -399,15 +413,58 @@ About me
 
 /* -------------------------------- 
 
+skills
+
+-------------------------------- */
+.skillsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    padding: 50px;
+}
+
+
+.skill-title {
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #00bfff;
+    /* 底線顏色與粗細 */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.skill-column ul {
+    margin: 25px;
+}
+
+.skill-column li {
+    text-align: justify;
+    word-wrap: break-word;
+    white-space: normal;
+    text-transform: none;
+}
+
+/* -------------------------------- 
+
 Footer
 
 -------------------------------- */
-.icon-wrapper {
+.footer-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100px;
+    height: 150px;
     width: 100%;
+}
+
+.footer-text {
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
 }
 
 /* 響應式 */

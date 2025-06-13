@@ -6,6 +6,8 @@ $(document).ready(function () {
 })
 
 function dom_listen() {
+    $(".about-description").eq(2).addClass("active")
+    $(".timeline-dot").eq(2).addClass("active")
     $(".timeline-item").hover(function () {
         let index = $(this).index(".timeline-item") * 1
         // console.log(index);
@@ -13,6 +15,9 @@ function dom_listen() {
         $(".about-description").removeClass("active");
         let target = $(".about-description").eq(index)
         target.addClass("active")
+        $(".timeline-dot").removeClass("active");
+        let target_ = $(".timeline-dot").eq(index)
+        target_.addClass("active")
     })
 
     $(".main-menu a").on("click", function () {

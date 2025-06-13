@@ -28,7 +28,7 @@
                     <a href="#home">首頁</a>
                     <a href="#about">關於我</a>
                     <a href="#skills">專業技能</a>
-                    <a href="#work">作品</a>
+                    <a href="#work">作品集</a>
                     <!-- <a href="#contact">聯絡我</a> -->
                 </ul>
             </nav>
@@ -78,15 +78,18 @@
                 </div>
                 <div class="timeline-about">
                     <div class="about-description">
-                        <h2>我的職涯歷程</h2>
+                        <h2>大學期間 (2018-2021)</h2>
                         <p>
                             修習相關課程，不斷精進我的程式能力，包括程式語言 C 系列、地理資訊系統導論、資料庫管理，
                             以及氣象與人工智慧(Python)等，且選修系上專題課，有助於提升熟練程度、並縮短學習速度。
-                            在大學期間，完成地球科學資訊學分學程。
+                        <ul>
+                            <li>完成地球科學資訊學分學程。</li>
+                            <li>參與2020年中央氣象局暑期實習。</li>
+                        </ul>
                         </p>
                     </div>
                     <div class="about-description">
-                        <h2>我的職涯歷程</h2>
+                        <h2>研究所期間 (2021-2023)</h2>
                         <p>
                             在研究所期間，著重在雷達觀測資料的應用，進行定量降水估計相關的研究。
                             除了事先閱讀並整理大量的參考文獻，還需要透過一系列的品質控管步驟，
@@ -100,7 +103,7 @@
                         <h2>工作內容</h2>
                         <p>
                             具三維視覺化的網頁應用，採JavaScript、HTML 搭配Three.js 函示庫、WebGL技術實現
-                            <br />
+                            <br>
                         <ul>
                             <li>與後端工程師與設計團隊協作，負責UX功能建置與整合，包括透過AJAX串接後端 API、ECharts資料視覺化圖表導入。</li>
                             <li>運用 Cesium 平台結合實際地理資料，進行三維場景重建與空間定位，還原真實環境配置。</li>
@@ -123,35 +126,73 @@
         <section class="main-section sectionColor3" id="skills">
             <h2>專業技能</h2>
             <div class="skillsContainer">
-
+                <div class="skill-column">
+                    <h3 class="skill-title">程式語言編寫</h3>
+                    <ul>
+                        <li>JavaScript、jQuery 網頁流程設計</li>
+                        <li>Matlab、Python 資料處理及分析</li>
+                        <li>Fortran 用於資料前置處理 (Linux 系統運行)</li>
+                    </ul>
+                </div>
+                <div class="skill-column">
+                    <h3 class="skill-title">氣象專業知識</h3>
+                    <ul>
+                        <li>理解物理過程背後的原理與推導，如應用向量分析來描述流體運動。</li>
+                        <li>培養從不同角度(1.天氣尺度及 2.氣象物理參數，如溫濕壓變化)思考來判讀天氣現象。</li>
+                        <li>數值分析包含最佳化、回歸、微積分等程式撰寫訓練。</li>
+                    </ul>
+                </div>
+                <div class="skill-column">
+                    <h3 class="skill-title">雷達氣象</h3>
+                    <ul>
+                        <li>雷達資料品質控管(Quality control)。</li>
+                        <li>雷達變數透過適當參數化關係轉換降雨率的定量降水估計(QPE)技術。</li>
+                        <li>對於垂直降雨變異性方面的誤差來源，所建立降雨在垂直高度上的關係。</li>
+                    </ul>
+                </div>
             </div>
         </section>
         <section class="main-section sectionColor4" id="work">
-            <h2>作品</h2>
+            <h2>作品集</h2>
             <div class="workContainer">
                 <section class="project">
-                    <img src="../media/img/demo/radar_canvas.png" alt="作品1" />
+                    <img src="../media/img/demo/radar_canvas.png" alt="作品一" />
                     <div class="project-text">
                         <h2>動態雷達偵測圖</h2>
-                        <p>這是作品1的介紹，描述它的特點與亮點。</p>
+                        <p>結合即時氣象雷達與基隆沿岸地理資訊，支援地圖中心定位與移動操作。</p>
                         <div class="link-block">
-                            <a class="link-btn" href="/test/radar_canvas" target="_blank">DEMO</a>
-                            |
+                            <a class="link-btn" href="/test/radar_canvas" target="_blank">DEMO</a> |
                             <a class="link-btn" href="">CODE</a>
                         </div>
+                        <br>
+                        <p class="italic-text">#Canvas #JavaScript #jQuery</p>
                     </div>
                 </section>
                 <section class="project">
-                    <img src="../media/img/demo/graffiti_wall.png" alt="作品1" />
+                    <img src="../media/img/demo/graffiti_wall.png" alt="作品二" />
                     <div class="project-text">
                         <h2>塗鴉牆</h2>
-                        <p>這是作品1的介紹，描述它的特點與亮點。</p>
-                        <p>適用在滑鼠及觸控控制</p>
-                        <p>多人協作</p>
+                        <p>提供多項繪圖工具，使用Socket支援多人同步操作，打造互動式創作體驗。</p>
+                        <p>透過 Cookie 技術暫存使用者的繪圖歷史，使用者可在重新載入頁面後繼續創作</p>
                         <div class="link-block">
                             <a class="link-btn" href="/test/graffiti_wall" target="_blank">DEMO</a> |
                             <a class="link-btn" href="">CODE</a>
                         </div>
+                        <br>
+                        <p class="italic-text">#Canvas #JavaScript #jQuery</p>
+                    </div>
+                </section>
+                <section class="project">
+                    <img src="../media/img/demo/GPS.webp" alt="作品三" />
+                    <div class="project-text">
+                        <h2>台灣地區地基式GPS反演可降水量之統計分析</h2>
+                        <p>以 Fortran 進行資料前處理，並透過 Python 進行資料分析與視覺化，處理地基式 GPS 訊號因大氣影響所產生的延遲量</p>
+                        <!-- <div class="link-block">
+                            <a class="link-btn" href="/test/graffiti_wall" target="_blank">DEMO</a> |
+                            <a class="link-btn" href="">CODE</a>
+                        </div> -->
+                        <br>
+                        <p class="italic-text">#Fortran #Python</p>
                     </div>
                 </section>
             </div>
@@ -170,6 +211,10 @@
             <a href="">
                 <i class="fa-solid fa-envelope"></i>
             </a>
+        </div>
+        <div class="footer-text">
+            <p>Copyright © 2025 Evie</p>
+            <p>All rights reserved.</p>
         </div>
     </div>
 
