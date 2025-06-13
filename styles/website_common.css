@@ -84,10 +84,6 @@ section {
     justify-items: center;
 }
 
-ul {
-    margin-left: 20px;
-    margin-top: 10px;
-}
 
 .navbar {
     display: flex;
@@ -176,6 +172,11 @@ ul {
 .main-container {
     text-align: left;
     padding-top: var(--font-hero);
+}
+
+.main-container ul {
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 /* 底部 */
