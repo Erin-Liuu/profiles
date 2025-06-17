@@ -14,7 +14,7 @@ buffer
 /log
 
 
-/media/
+# /media/
 /model/
 /upload/
 lib/wit/Release/output.new.txt
