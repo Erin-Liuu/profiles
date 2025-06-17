@@ -7,10 +7,13 @@
 /config/
 buffer
 # Logs
-/include/
+# /include/
 /include/cesium
-/include/cesium@1.114.0
+# /include/cesium@1.114.0
+/include/jquery@3.3.1
 /include/jqueryui@1.13.0
+/include/js.cookie.min.js
+/include/font-awesome
 /log
 
 
