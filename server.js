@@ -1,10 +1,10 @@
 /*eslint-env node*/
-require('dotenv').config();
 'use strict';
 var folderInit = require('./util/folderInit.js')
 // const pgControl = require('./util/pg.controller.js');
 folderInit.init().then(function () {
     (function () {
+        require('dotenv').config();
         var express = require('express');
         var compression = require('compression');
         var fs = require('fs');
@@ -132,15 +132,19 @@ folderInit.init().then(function () {
 
         app.engine('html', require('express-art-template'));
 
+        const HOST = '0.0.0.0'; // 強制外部可連線
 
-        var server = app.listen(argv.port, argv.public ? undefined : 'localhost', function () {
-            // var server = server0.listen(argv.port, argv.public ? undefined : 'localhost', function () {
-            if (argv.public) {
-                console.log('development server running publicly.  Connect to http://localhost:%d/', server.address().port);
-            } else {
-                console.log('development server running locally.  Connect to http://localhost:%d/', server.address().port);
-            }
-        });
+        var server = app.listen(argv.port, HOST, function () {
+            console.log('Server running at http://%s:%d/', 'localhost', server.address().port);
+        })
+        // var server = app.listen(argv.port, argv.public ? undefined : 'localhost', function () {
+        //     // var server = server0.listen(argv.port, argv.public ? undefined : 'localhost', function () {
+        //     if (argv.public) {
+        //         console.log('development server running publicly.  Connect to http://localhost:%d/', server.address().port);
+        //     } else {
+        //         console.log('development server running locally.  Connect to http://localhost:%d/', server.address().port);
+        //     }
+        // });
 
         server.on('error', function (e) {
             if (e.code === 'EADDRINUSE') {
