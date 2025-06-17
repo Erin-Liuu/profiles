@@ -1,4 +1,10 @@
 {
+  "name": "my-node-site",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "@turf/turf": "^6.5.0",
     "@tweenjs/tween.js": "^17.6.0",
