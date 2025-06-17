@@ -1,4 +1,5 @@
 /*eslint-env node*/
+require('dotenv').config();
 'use strict';
 var folderInit = require('./util/folderInit.js')
 // const pgControl = require('./util/pg.controller.js');
@@ -24,7 +25,7 @@ folderInit.init().then(function () {
         let yargs = require('yargs').options({
             'port': {
                 // 'default': 9999,
-                'default': 20080,
+                'default': process.env.PORT || 20080,
                 'description': 'Port to listen on.'
             },
             'public': {
