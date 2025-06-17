@@ -267,12 +267,6 @@ function start_draw() {
             that.mouse_down1.toggle(true)
 
             that.info = {
-                // position_left: [],
-                // position_left1: [],
-                // left_show: false,
-                // position_move: [],
-                // position_move1: [],
-                // move_show: false,
                 drawingCanvas: null,
                 drawingContext: null,
                 material: null,
@@ -285,35 +279,17 @@ function start_draw() {
                 using: true,
             }
 
-            // that.info.material = new THREE.MeshBasicMaterial({
-            //     color: 0xa9a9a9,
-            // });
-
-            // let mesh = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), that.info.material);
-            // mesh.position.y = 40
-            // scene.add(mesh);
-
-            // console.log(that.mouse_down);
-            //canvas setup
-            // that.info.drawingCanvas = that.mouse_down.dom
-            // that.info.drawingContext = that.info.drawingCanvas.getContext('2d');
-
-            // const drawingCanvas = that.info.drawingCanvas
             if (!drawingCanvas) {
                 drawingCanvas = that.mouse_down.dom
                 drawingContext = drawingCanvas.getContext('2d');
 
-                drawingCanvas.width = window.parent.innerWidth //window.innerWidth
-                drawingCanvas.height = window.parent.innerHeight
+                drawingCanvas.width = $("#touchArea").width() //window.parent.innerWidth
+                drawingCanvas.height = $("#touchArea").height() //window.parent.innerHeight
                 drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
             }
-            // that.info.drawingContext.fillStyle = '#A9A9A9';
-            // that.info.drawingContext.fillRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-            // that.info.material.map = new THREE.CanvasTexture(drawingCanvas);
         },
         down_func: function (that, event, x, y) {
             that.info.drawStartPos.set(x, y)
-            // if (!that.info.color) that.info.color = `rgb(${colorNow[0]}, ${colorNow[1]}, ${colorNow[2]})`
             // console.log(that.info.drawStartPos);
             that.info.paint = true;
             drawingContext.beginPath();
@@ -340,8 +316,6 @@ function start_draw() {
                 drawingContext.stroke();
                 // reset drawing start position to current position.
                 that.info.drawStartPos.set(x, y);
-                // need to flag the map as needing updating.
-                // that.info.material.map.needsUpdate = true;
 
                 draw_cb({ type: "pen", data: { paint: true, x, y, color: that.info.color, lineWidth: that.info.lineWidth } })
             }
@@ -379,16 +353,6 @@ function start_draw() {
             that.mouse_down1.toggle(false)
             that.mouse_move1.toggle(false)
             that.mouse_up1.toggle(false)
-
-            // if (that.info.using) {
-            //     that.info.using = false
-
-            //     // if (that.info.polygon_left)
-            //     // pic_group.remove(that.info.polygon_left);
-            //     // if (that.info.polygon_move)
-            //     // pic_group.remove(that.info.polygon_move);
-            // }
-            // drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
         },
         end: function (that) {
             that.clear()
@@ -413,12 +377,6 @@ function start_draw() {
             that.mouse_down1.toggle(true)
 
             that.info = {
-                // position_left: [],
-                // position_left1: [],
-                // left_show: false,
-                // position_move: [],
-                // position_move1: [],
-                // move_show: false,
                 tempCanvas: null,
                 tempCtx: null,
                 preImageData: null,
@@ -439,20 +397,18 @@ function start_draw() {
                 drawingCanvas = that.mouse_down.dom
                 drawingContext = drawingCanvas.getContext('2d');
 
-                drawingCanvas.width = window.parent.innerWidth
-                drawingCanvas.height = window.parent.innerHeight
+                drawingCanvas.width = $("#touchArea").width() //window.parent.innerWidth
+                drawingCanvas.height = $("#touchArea").height() //window.parent.innerHeight
 
                 drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
             }
             that.info.tempCanvas = document.createElement('canvas')
             const tempCanvas = that.info.tempCanvas
-            tempCanvas.width = window.parent.innerWidth;
-            tempCanvas.height = window.parent.innerHeight;
+            tempCanvas.width = $("#touchArea").width() //window.parent.innerWidth;
+            tempCanvas.height = $("#touchArea").height() //window.parent.innerHeight;
 
             that.info.tempCtx = tempCanvas.getContext('2d');
             that.info.tempCtx.drawImage(drawingCanvas, 0, 0);
-            // that.info.material = new THREE.MeshBasicMaterial();
-
 
         },
         down_func: function (that, event, x, y) {
@@ -557,15 +513,6 @@ function start_draw() {
             that.mouse_down1.toggle(false)
             that.mouse_move1.toggle(false)
             that.mouse_up1.toggle(false)
-            // drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
-            // if (that.info.using) {
-            //     that.info.using = false
-
-            //     // if (that.info.polygon_left)
-            //     // pic_group.remove(that.info.polygon_left);
-            //     // if (that.info.polygon_move)
-            //     // pic_group.remove(that.info.polygon_move);
-            // }
         },
         end: function (that) {
             that.clear()
@@ -653,8 +600,10 @@ function update_draw_info({ type, data }) {
         case "shape":
             if (!temp_info.tempCanvas) {
                 const tempCanvas = document.createElement('canvas')
-                tempCanvas.width = window.parent.innerWidth;
-                tempCanvas.height = window.parent.innerHeight;
+                // tempCanvas.width = window.parent.innerWidth;
+                // tempCanvas.height = window.parent.innerHeight;
+                tempCanvas.width = $("#touchArea").width();
+                tempCanvas.height = $("#touchArea").height();
 
                 const tempCtx = tempCanvas.getContext('2d');
                 tempCtx.drawImage(drawingCanvas, 0, 0);

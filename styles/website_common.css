@@ -397,11 +397,13 @@ About me
     line-height: 1.6;
     transform: translateY(50px);
     transition: all 0.8s ease;
+    z-index: 1;
 }
 
 .about-description.active {
     opacity: 1;
     transform: translateY(0);
+    z-index: 5;
 }
 
 .about-description p,
@@ -409,7 +411,12 @@ About me
     text-align: justify;
     word-wrap: break-word;
     white-space: normal;
-    text-transform: none;
+    /* text-transform: none; */
+}
+
+.about-description a:hover {
+    text-decoration: none;
+    color: #00bcd4;
 }
 
 /* -------------------------------- 

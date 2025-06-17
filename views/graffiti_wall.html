@@ -11,6 +11,7 @@
     <script src="/include/jqueryui@1.13.0/jquery-ui.min.js"></script>
     <script src="/include/js.cookie.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <style>
     @import url(/node_modules/cesium/Build/Cesium/Widgets/widgets.css);
@@ -29,37 +30,6 @@
     }
 
 
-    #cesiumContainer {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        position: absolute;
-        top: 0vh;
-        left: 0;
-        z-index: -10;
-        font-family: Microsoft JhengHei;
-    }
-
-    #threeContainer {
-        pointer-events: none;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0vh;
-        z-index: -9;
-    }
-
-    #inner_canvas {
-        position: absolute;
-        z-index: -1;
-        background: transparent !important;
-        touch-action: auto;
-        transition: top 0.5s ease-in-out;
-        top: 18vh;
-    }
-
     /* 塗鴉 */
     #divDrawcontent {
         position: absolute;
@@ -67,158 +37,182 @@
         left: 0;
         top: 0;
         z-index: 0;
+        width: 100vw;
+        height: 100vh;
+        /* overflow: auto; */
+        /* 出現滾動條 */
         background-image: radial-gradient(#ccc 1px, transparent 0);
         background-size: 20px 20px;
         /* 間格寬高 */
         background-repeat: repeat;
     }
 
-    .controlButtn {
-        /* position: absolute;
-        z-index: 2; */
+    #touchArea {
+        width: 1920px;
+        height: 558px;
+    }
+
+    .top-panel {
         display: flex;
-        justify-content: space-between;
-        right: 6vw;
-        top: 0vh;
-    }
-
-    .button-container {
-        /* display: flex; */
-        width: 67%;
-        height: 95%;
-        /* padding-top: 2vh; */
-        justify-content: space-around;
         position: absolute;
-        /* right: -14vw; */
-        padding: 0vh 2.5vw
+        right: 50vw;
+        width: 450px;
+        height: 50px;
+        background-color: black;
+        opacity: 0.5;
+        color: lightgoldenrodyellow;
+        justify-content: center;
+        align-items: center;
     }
 
-    .button-container-end {
-        position: absolute;
-        top: 13vh;
-        right: 13.5vw;
-        display: flex;
-        flex-direction: column;
-        /* margin-top: 6vh; */
-        justify-content: space-between;
-        height: 8vh;
-        width: 3vh;
-    }
-
-
-    /* 右側面板樣式 */
-    .side-panel {
-        position: absolute;
-        top: 10px;
-        right: 0px;
-        width: 300px;
-        height: 400px;
-        background-color: #222;
-        color: #fff;
-        transition: transform 0.3s ease;
-        border-left: 1px solid #444;
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* 當加上 .collapsed 類別時，收闔右側欄 */
-    .side-panel.collapsed {
-        transform: translateX(85%);
-    }
-
-    .panel-header {
+    .tool-item {
+        padding: 0 15px;
+        position: relative;
         display: flex;
         align-items: center;
-        padding: 10px;
+        height: 42px;
+    }
+
+    /* 加入右邊框作為分隔線 */
+    .tool-item:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 25%;
+        bottom: 25%;
+        width: 1px;
+        background-color: #555;
+    }
+
+    .tool-item-container {
+        /* display: none; */
+        visibility: hidden;
+        position: absolute;
+        top: calc(100% + 10px);
+        /* 在畫筆底下 */
+        left: 0;
         background-color: #333;
-        border-bottom: 1px solid #555;
-        gap: 16px;
+        padding: 10px;
+        border-radius: 6px;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 255, 255, 0.2);
+        color: #fff;
+
+        opacity: 0;
+        transform: translateY(20px);
+        /* 初始往下 */
+        transition: all 0.4s ease;
     }
 
-    .panel-header button {
-        /* background-color: #00bcd4; */
-        /* color: #000; */
-        border: none;
-        /* padding: 6px 10px; */
-        cursor: pointer;
-        border-radius: 4px;
+    .tool-item-container button {
+        background-color: #333;
     }
 
-    .panel-content {
-        padding: 20px;
-        flex: 1;
+    .tool-item-container button.active {
+        background-color: #00ffff;
+    }
+
+    .tool-label.active {
+        border: 2px solid #00ffff;
+        box-shadow: 0 0 5px #00ffff;
+        padding: 3px;
+    }
+
+    .tool-item-container.active {
         display: flex;
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    .toggle-img {
-        width: 25px;
-        height: 25px;
-        object-fit: contain;
+    .tool-item-container input[type="range"] {
+        /* width: 100%; */
+        margin-top: 8px;
+        accent-color: #00ffff;
+    }
+
+    .pen-size-display {
+        border-radius: 50%;
+        background-color: black;
+        display: inline-block;
+        align-items: center;
+        margin: 1vw;
+        width: 6px;
+        height: 6px;
+    }
+
+    /* 調色盤 */
+    .color-picker-wrapper {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+        overflow: hidden;
+        box-shadow: 0 0 5px #00ffff88;
+        cursor: pointer;
+    }
+
+    .colorPicker {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 </style>
 
 <body>
-    <div id="cesiumContainer"></div>
-    <div id="threeContainer"> </div>
-
-    <!-- <iframe id="inner_canvas" src="../app/main_inner_canvas" style="display: none;"></iframe> -->
     <div class="" id="mainDraw">
         <div class="" id="divDrawcontent">
             <canvas id="touchArea"></canvas>
         </div>
     </div>
 
-    <div class="side-panel" id="sidePanel">
-        <div class="panel-header">
-            <button id="toggleBtn"><img class="toggle-img" src="../../media/img/select/arrow_right0.png"></button>
-            <h3>塗鴉工具</h3>
-        </div>
-        <div class="panel-content graffitilistDiv">
-            <div class="controlButtn">
-                <div class="button-container">
-                    <div class="control-section" style="display: none">
-                        <p>控制選項</p>
-                        <select id="control_add">
-                            <option id="mouse_control" value="0">mouse</option>
-                            <option id="point_control" value="1" selected>point</option>
-                            <option id="touch_control" value="2">touch</option>
-                            <!-- <option id="point_control" value="1">point</option>
-                                    <option id="touch_control" value="2" selected>touch</option> -->
-                        </select>
-                    </div>
-
-                    <div class="control-section">
-                        <p id="draw_color_title">繪製顏色</p>
-                        <input type="color" id="draw_color" />
-                    </div>
-
-                    <div class="control-section">
-                        <p id="draw_lineWidth_title">線條寬度</p>
-                        <input type="number" id="draw_lineWidth" value="1.5" step="0.1" />
-                    </div>
-
-                    <div class="control-section" style="flex: 1.5">
-                        <p id="draw_tool_title">繪製工具</p>
-                        <div>
-                            <button id="add_pen">畫筆</button>
-                            <select class="add_shape">
-                                <option value="-1">加入形狀</option>
-                                <option value="0">圓形</option>
-                                <option value="1">矩形</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="button-container-end">
-                    <button id="undo">復原</button><br>
-                    <button id="clear">清除</button>
-                </div>
+    <div class="top-panel">
+        <div class="tool-item" id="add_pen">
+            <span class="tool-label">畫筆</span>
+            <div class="tool-item-container">
             </div>
         </div>
+        <div class="tool-item" id="add_shape">
+            <span class="tool-label">形狀</span>
+            <div class="tool-item-container">
+                <button class="shape-option" value="0" data-tool="circle"><i class="fa-regular fa-circle"></i></button>
+                <button class="shape-option" value="1" data-tool="rectangle"><i
+                        class="fa-regular fa-square"></i></button>
+            </div>
+        </div>
+        <div class="tool-item">
+            <span class="tool-label">線條<br>寬度</span>
+            <div class="tool-item-container">
+                <input type="range" id="draw_lineWidth" min="0.5" max="8" value="1.5" step="0.1">
+                <div class="pen-size-display"></div>
+            </div>
+        </div>
+        <div class="tool-item">
+            <span class="tool-label">
+                <div class="color-picker-wrapper">
+                    <input type="color" class="colorPicker" id="draw_color">
+                </div>
+            </span>
+        </div>
+        <div class="tool-item"> </div>
+        <div class="tool-item" id="undo">還原</div>
+        <div class="tool-item" id="clear">清除</div>
     </div>
 
-
+    <div class="control-section" style="display: none">
+        <p>控制選項</p>
+        <select id="control_add">
+            <option id="mouse_control" value="0">mouse</option>
+            <option id="point_control" value="1" selected>point</option>
+            <option id="touch_control" value="2">touch</option>
+        </select>
+    </div>
 
 
     <!--importmap--瀏覽器功能--自定義導入時使用的路徑映射-->

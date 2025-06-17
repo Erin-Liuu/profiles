@@ -1,6 +1,7 @@
 import * as draw_manage from './draw_manage.js'
 
-let socket = io();
+let shape_type_control = 0   //0圓 1矩形
+const socket = io();
 
 all_init()
 function all_init() {
@@ -17,6 +18,7 @@ function all_init() {
 
         let that = document.getElementById('control_add')
         draw_manage.set_listen_func(that)
+        $(".tool-label").eq(0).addClass("active")
 
         //TODO多人協作
         socket.on('receive_draw_message', (_data) => {
@@ -33,22 +35,53 @@ function all_init() {
     }
 
     function dom_listen() {
-        //塗鴉
-        $("#control_add").on('change', function () {
-            draw_manage.set_listen_func(this)
+        $(".tool-item").on("click", function () {
+            let index = $(this).index(".tool-item") * 1
+
+            $(".tool-item-container").removeClass("active")
+            let target = $(".tool-item-container").eq(index)
+            if (index != 0) target.addClass("active")
+
+            if (index < 2) {   //畫筆或形狀
+                $(".tool-label").removeClass("active")
+                let target_ = $(".tool-label").eq(index)
+                target_.addClass("active")
+            }
         })
+
+        //塗鴉
         $("#draw_color").on('change', function () {
             draw_manage.draw_color_func(this)
+
+            let color = $(this).val()
+            $(".color-picker-wrapper").css("background", color)
         })
         $("#draw_lineWidth").on('change', function () {
+            let lineWidth = $(this).val()
+            console.log(lineWidth);
+
             draw_manage.draw_lineWidth_func(this)
+
+            $(".pen-size-display").css("width", lineWidth * 1.5 + "px")
+            $(".pen-size-display").css("height", lineWidth * 1.5 + "px")
         })
         $("#add_pen").on('click', function () {
-            $(".add_shape").val('-1');
-            $(".add_shape").trigger('change')
             draw_manage.addCanvasInit()
         })
-        $(".add_shape").on('change', function () {
+        $("#add_shape").on('click', function () {
+            $(".shape-option").removeClass("active")
+            let that = $(".shape-option").eq(shape_type_control)
+            that.addClass("active")
+
+            draw_manage.draw_shape_func(that)
+            draw_manage.addShapeInit()
+        })
+        $(".shape-option").on('click', function () {
+            $(".shape-option").removeClass("active")
+            $(this).addClass("active")
+
+            let index = $(this).val() * 1
+            shape_type_control = index
             draw_manage.draw_shape_func(this)
             draw_manage.addShapeInit()
         })
