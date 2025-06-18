@@ -78,29 +78,4 @@ function dom_listen() {
             }
         });
     });
-
-
-    var removeDuplicates = function (nums) {
-        let data_obj = {}
-        for (var k in nums) {
-            data_obj[nums[k]] = k * 1
-        }
-
-        let out = Object.keys(data_obj).map((x) => x * 1)
-        return out
-    };
-    // let ans = plusOne([6, 1, 4, 5, 3, 9, 0, 1, 9, 5, 1, 8, 6, 7, 0, 5, 5, 4, 3])
-    let ans = removeDuplicates([1, 1, 2])
-    console.log(ans);
-
-    var removeElement = function (nums, val) {
-        let list = []
-        for (var k in nums) {
-            if (nums[k] != val) list.push(nums[k])
-        }
-        return list
-    };
-    let ans1 = removeElement([1, 1, 2], 1)
-    console.log(ans1);
-
 }
