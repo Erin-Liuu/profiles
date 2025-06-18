@@ -91,17 +91,5 @@ function all_init() {
         $("#clear").on('click', function () {
             draw_manage.clear_canvas_func()
         })
-
-
-        $("#toggleBtn").on("click", function () {
-            $("#sidePanel").toggleClass("collapsed");
-
-            // 切換箭頭圖示
-            if ($("#sidePanel").hasClass("collapsed")) {
-                $(".toggle-img").css("transform", "rotate(180deg)");
-            } else {
-                $(".toggle-img").css("transform", "rotate(0deg)");
-            }
-        })
     }
 }
