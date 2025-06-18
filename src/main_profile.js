@@ -44,12 +44,12 @@ function dom_listen() {
     })
 
     $(window).on('scroll', function () {
-        const triggerTop = $('.aboutContainer').offset().top;
-        const triggerbottom = triggerTop + $('.aboutContainer').outerHeight();
+        const triggerTop = $('#about').offset().top;
+        const triggerbottom = triggerTop + $('#about').outerHeight();
         const scrollTop = $(window).scrollTop();
         const header = $('.nav-links');
 
-        if (scrollTop >= triggerTop && scrollTop <= triggerbottom) {
+        if (scrollTop >= triggerTop-50 && scrollTop <= triggerbottom) {
             header.css('color', 'black');
         } else {
             header.css('color', 'white');
