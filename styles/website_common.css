@@ -167,6 +167,34 @@ section {
     font-size: 20px;
 }
 
+/* Tooltip */
+.copy_email {
+    position: relative;
+}
+
+.copy_email::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 110%;
+    left: -100%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.copy_email:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
 
 /* 主要 */
 .main-container {
@@ -215,6 +243,10 @@ section {
 .sectionColor2 {
     background-color: #fff;
     color: #000;
+    background-image: url(../media/img/bk.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 .sectionColor3 {
@@ -243,12 +275,13 @@ Home
     left: 0;
     width: 100%;
     height: 100%;
+    /* pointer-events: none; */
 }
 
 #home {
     position: relative;
     width: 100%;
-    height: 65vh;
+    height: 75vh;
 }
 
 /* -------------------------------- 
@@ -259,7 +292,7 @@ Work
 .workContainer {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 35px;
     padding: 20px;
     width: 90%;
 }

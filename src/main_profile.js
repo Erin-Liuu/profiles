@@ -32,6 +32,30 @@ function dom_listen() {
         target.addClass("active")
     })
 
+    $(".copy_email").on("click", function (e) {
+        e.preventDefault();
+        const email = "kccmewal@gmail.com";
+
+        navigator.clipboard.writeText(email).then(() => {
+            alert("信箱已複製到剪貼簿！");
+        }).catch(err => {
+            console.error("複製失敗", err);
+        });
+    })
+
+    $(window).on('scroll', function () {
+        const triggerTop = $('.aboutContainer').offset().top;
+        const triggerbottom = triggerTop + $('.aboutContainer').outerHeight();
+        const scrollTop = $(window).scrollTop();
+        const header = $('.nav-links');
+
+        if (scrollTop >= triggerTop && scrollTop <= triggerbottom) {
+            header.css('color', 'black');
+        } else {
+            header.css('color', 'white');
+        }
+    });
+
     $("#home_iframe").on("load", function () {
         let iframeDoc = $("#home_iframe").contents(); // 取得 iframe 內部的 document
         setTimeout(function () {
@@ -54,14 +78,4 @@ function dom_listen() {
             }
         });
     });
-    // $("#home_iframe").hover(function () {
-    //     if (
-    //         home_iframe
-    //         && home_iframe.contentWindow
-    //         && home_iframe.contentWindow.call_window_func
-    //     ) {
-    //         home_iframe.contentWindow.call_window_func("update_dissolve_effect", true)
-    //     }
-
-    // })
 }

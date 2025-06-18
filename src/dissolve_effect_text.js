@@ -147,7 +147,8 @@ async function init() {
     renderer.setSize(window.innerWidth, window.innerHeight) // 場景大小
     // renderer.setClearColor(0x000, 1.0) // 預設背景顏色
     renderer.setClearColor(0xffffff, 1.0) // 預設背景顏色
-    renderer.shadowMap.enable = true // 陰影效果
+    renderer.shadowMap.enabled = true // 陰影效果
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     // renderer.sortObjects = false; //渲染順序
     // renderer.localClippingEnabled = true;
 
@@ -182,9 +183,9 @@ async function init() {
 
     // camera.position.set(100, 100, 100) // 相機位置
     camera.position.set(
-        -60.62014792134313,
-        42.690824096257764,
-        455.4427305664552
+        -46.758260983185096,
+        79.33162863089245,
+        664.7411890828757
     ) // 相機位置
 
     cameraControl = new OrbitControls(camera, renderer.domElement)
@@ -192,9 +193,9 @@ async function init() {
     cameraControl.dampingFactor = 0.25 // 阻尼系數
     // cameraControl.target.set(0, 0, 0)
     cameraControl.target.set(
-        -36.70278459863517,
-        49.89927575397669,
-        -4.348869831157332
+        -17.851385073144737,
+        89.83166910250166,
+        -5.304256848254879
     )
 
     skybox = new THREE.CubeTextureLoader()
@@ -209,7 +210,7 @@ async function init() {
         ]);
     // scene.background = skybox   //no material
     // console.log(skybox); 
-    var textureLoader = new THREE.TextureLoader().setPath('/media/img/skybox/sky/')
+    var textureLoader = new THREE.TextureLoader().setPath('/media/img/skybox/Park/')
     var texture0 = textureLoader.load('right.jpg');
     var texture1 = textureLoader.load('left.jpg');
     var texture2 = textureLoader.load('top.jpg');
@@ -397,9 +398,9 @@ async function init() {
     let light = new THREE.AmbientLight(0xffffff, 2); // white light
     scene.add(light);
     let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(0, 100, 15);
+    directionalLight.position.set(0, 10, -20);
     scene.add(directionalLight);
-    directionalLight.target.position.set(0, -10, 0);
+    directionalLight.target.position.set(0, -5, 0);
     scene.add(directionalLight.target);
 
     directionalLight.castShadow = true
@@ -415,9 +416,9 @@ async function init() {
     directionalLight.shadow.camera.far = 500; // default
     directionalLight.shadow.bias = -0.001
 
-    const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-    scene.add(helper);
-    helper.update();
+    // const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+    // scene.add(helper);
+    // helper.update();
 
     var planeGeometry = new THREE.PlaneGeometry(5000, 1000)
     var planeMaterial = new THREE.MeshStandardMaterial({
@@ -427,7 +428,7 @@ async function init() {
     bottom_plane.rotation.x = -0.5 * Math.PI // 使平面與 y 軸垂直，並讓正面朝上
     bottom_plane.position.set(0, -1, 0)
     bottom_plane.receiveShadow = true
-    scene.add(bottom_plane);
+    // scene.add(bottom_plane);
 
 
     //js初始化
