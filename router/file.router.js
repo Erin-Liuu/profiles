@@ -4,7 +4,7 @@ var router = express.Router();
 var fs = require('fs');
 // const path = require('path');
 // // const axios = require("axios");
-const formidable = require('formidable');
+// const formidable = require('formidable');
 const $global = require("../util/global.js");
 const ERROR_CODE = {
     FILE_WRONG: 0, // 上傳流程錯誤 (formidable)

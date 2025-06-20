@@ -1,7 +1,13 @@
 import * as draw_manage from './draw_manage.js'
 
 let shape_type_control = 0   //0圓 1矩形
-const socket = io();
+
+console.log(location);
+const socket = io(location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://profiles-12ch.onrender.com',
+    {
+        transports: ['websocket', 'polling']
+    }
+);
 
 all_init()
 function all_init() {
