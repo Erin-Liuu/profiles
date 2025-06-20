@@ -1,36 +1,9 @@
 /* 字體 */
-@font-face {
+/* @font-face {
     font-family: 'CursedTimerUlil';
     src: url('/media/font/cursed-timer-ulil-font/CursedTimerUlil-Aznm.ttf') format('truetype');
-}
+} */
 
-@font-face {
-    font-family: 'KodeMono';
-    src: url('/media/font/Kode_Mono/KodeMono-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'KodeMono';
-    src: url('/media/font/Kode_Mono/KodeMono-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'KodeMono';
-    src: url('/media/font/Kode_Mono/KodeMono-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'KodeMono';
-    src: url('/media/font/Kode_Mono/KodeMono-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-}
 
 /* 全局設定 */
 * {
@@ -329,9 +302,10 @@ Work
     /* 加陰影增加層次感 */
 }
 
-.link-block{
+.link-block {
     margin-top: 9px;
 }
+
 .link-btn {
     margin-top: auto;
     font-weight: 700;

@@ -1,5 +1,6 @@
 let window_flag = {
     debug: false,
+    log: false,
 }
 import * as THREE from 'three';
 
@@ -10,6 +11,11 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 
+if (!window_flag.log) {
+    console.log = function () {
+        return;
+    }
+}
 
 window['call_window_func'] = function (func_name, params) {
     if (window_func[func_name]) window_func[func_name](params)
@@ -483,7 +489,7 @@ async function add_text(text) {
     let geometry = new TextGeometry(text, {
         font: font,
         size: text_info.size,
-        height: text_info.height,
+        depth: text_info.height,
         curveSegments: text_info.curveSegments,
         bevelThickness: text_info.bevelThickness,
         bevelSize: text_info.bevelSize,
