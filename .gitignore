@@ -19,7 +19,7 @@ buffer
 
 # /media/
 /model/
-/upload/temp/drawImage/*
+# /upload/temp/drawImage/*
 lib/wit/Release/output.new.txt
 logs
 *.log
